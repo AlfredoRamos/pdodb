@@ -1,7 +1,7 @@
 SimplePDOClass
 ==============
 
-Simple PDO Class with prepared statements.
+Simple PDO Class with prepared statements (MySQL driver).
 Usage Example
 =============
 ```php
