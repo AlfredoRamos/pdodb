@@ -16,10 +16,10 @@ class DataBase {
 
 		// Set options
 		$options = array(
-			PDO::ATTR_PERSISTENT		=> true,
-			PDO::ATTR_ERRMODE		=> PDO::ERRMODE_EXCEPTION,
+			PDO::ATTR_PERSISTENT			=> true,
+			PDO::ATTR_ERRMODE				=> PDO::ERRMODE_EXCEPTION,
 			PDO::MYSQL_ATTR_INIT_COMMAND	=> 'SET NAMES utf8',
-			PDO::ATTR_EMULATE_PREPARES	=> false
+			PDO::ATTR_EMULATE_PREPARES		=> false
 		);
 
 		try {
@@ -54,6 +54,11 @@ class DataBase {
 			}
 		}
 		$this->stmt->bindValue($param, $value, $type);
+	}
+	
+	// Bind the data from an array
+	public function bind_all($param_array) {
+		array_map(array($this, 'bind'), array_keys($param_array), array_values($param_array));
 	}
 
 	// Executhe the query
