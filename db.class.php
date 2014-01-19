@@ -9,25 +9,29 @@ class DataBase {
 
 	private $dbh;
 	private $error;
+	
+	private $dsn;
+	private $driver_options;
 
 	public function __construct(){
 		// Set DSN
-		$dsn = 'mysql:host='.$this->host.';dbname='.$this->dbname;
+		$this->dsn = 'mysql:host='.$this->host.';dbname='.$this->dbname;
 
 		// Set options
-		$options = array(
-			PDO::ATTR_PERSISTENT			=> true,
+		$this->driver_options = array(
+			PDO::ATTR_EMULATE_PREPARES		=> false,
 			PDO::ATTR_ERRMODE				=> PDO::ERRMODE_EXCEPTION,
-			PDO::MYSQL_ATTR_INIT_COMMAND	=> 'SET NAMES utf8',
-			PDO::ATTR_EMULATE_PREPARES		=> false
+			PDO::ATTR_DEFAULT_FETCH_MODE	=> PDO::FETCH_OBJ,
+			PDO::ATTR_PERSISTENT			=> true,
+			PDO::MYSQL_ATTR_INIT_COMMAND	=> 'SET NAMES utf8'
 		);
 
 		try {
 			// Create a new PDO instanace
-			$this->dbh = new PDO($dsn, $this->user, $this->pass, $options);
-		} catch(PDOException $e) {
+			$this->dbh = new PDO($this->dsn, $this->user, $this->pass, $this->driver_options);
+		} catch(PDOException $ex) {
 			// Catch any errors
-			$this->error = $e->getMessage();
+			$this->error = $ex->getMessage();
 		}
 	}
 
@@ -67,15 +71,15 @@ class DataBase {
 	}
 
 	// Get multiple records
-	public function resultSet(){
+	public function resultSet($fetch_style = ''){
 		$this->execute();
-		return $this->stmt->fetchAll(PDO::FETCH_ASSOC);
+		return $this->stmt->fetchAll();
 	}
 
 	// Get single record
 	public function single(){
 		$this->execute();
-		return $this->stmt->fetch(PDO::FETCH_ASSOC);
+		return $this->stmt->fetch();
 	}
 
 	// Get number of affected rows
