@@ -71,7 +71,7 @@ class DataBase {
 	}
 
 	// Get multiple records
-	public function resultSet($fetch_style = ''){
+	public function resultSet(){
 		$this->execute();
 		return $this->stmt->fetchAll();
 	}
