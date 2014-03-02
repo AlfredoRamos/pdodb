@@ -27,7 +27,7 @@ $param_array = array(
 	':value_2'	=> 'Value 2',
 	':value_3'	=> 'Value 3',
 );
-$db->bind_all($param_array);
+$db->bindArray($param_array);
 
 $db->execute();
 

@@ -1,15 +1,15 @@
 <?php
 class DataBase {
-	private $stmt;
 
 	private $host	= DB_HOST;
 	private $user	= DB_USER;
 	private $pass	= DB_PASS;
 	private $dbname	= DB_NAME;
 
+	private $stmt;
 	private $dbh;
 	private $error;
-	
+
 	private $dsn;
 	private $driver_options;
 
@@ -19,10 +19,10 @@ class DataBase {
 
 		// Set options
 		$this->driver_options = array(
-			PDO::ATTR_EMULATE_PREPARES		=> false,
-			PDO::ATTR_ERRMODE				=> PDO::ERRMODE_EXCEPTION,
+			PDO::ATTR_EMULATE_PREPARES	=> false,
+			PDO::ATTR_ERRMODE		=> PDO::ERRMODE_EXCEPTION,
 			PDO::ATTR_DEFAULT_FETCH_MODE	=> PDO::FETCH_OBJ,
-			PDO::ATTR_PERSISTENT			=> true,
+			PDO::ATTR_PERSISTENT		=> true,
 			PDO::MYSQL_ATTR_INIT_COMMAND	=> 'SET NAMES utf8'
 		);
 
@@ -61,7 +61,7 @@ class DataBase {
 	}
 	
 	// Bind the data from an array
-	public function bind_all($param_array) {
+	public function bindArray($param_array) {
 		array_map(array($this, 'bind'), array_keys($param_array), array_values($param_array));
 	}
 
