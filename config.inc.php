@@ -2,7 +2,7 @@
 /**
  * Simple PDO Class
  * @package simple-pdo-class
- * @author Alfredo Ramos <abaddon.ormuz@yandex.com>
+ * @author Alfredo Ramos <alfredo.ramos@yandex.com>
  * @link https://github.com/AlfredoRamos/simple-pdo-class
  * @copyright Copyright (c) 2014, Alfredo Ramos
  * @licence http://www.gnu.org/licenses/gpl-3.0.html GNU General Public License, version 3
@@ -24,13 +24,13 @@
  */
 
 /**
- * The host name.
+ * Host name.
  * Usually 'localhost'
  */
 define('DB_HOST', 'localhost');
 
 /**
- * The database name
+ * Database name
  */
 define('DB_NAME', 'your_db');
 
