@@ -26,13 +26,13 @@
 	require_once 'config.inc.php';
 	require_once 'database.class.php';
 
-	$db = new DataBase();
+	$db = new Database;
 
 	// SELECT statement
 
 	$db->query('SELECT id, column_1, column_2 FROM table_name WHERE column_3 = :value');
 	$db->bind(':value', 'Something');
-	$db->resultSet();
+	$db->fetchAll();
 
 
 	// INSERT statement

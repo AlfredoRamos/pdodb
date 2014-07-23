@@ -26,12 +26,13 @@
 /**
  * @example examples.php
  */
-class DataBase {
 
-	private $host	= DB_HOST;
-	private $user	= DB_USER;
-	private $pass	= DB_PASS;
-	private $dbname	= DB_NAME;
+class Database {
+
+	private $host			= DATABASE_HOST;
+	private $user			= DATABASE_USER;
+	private $password		= DATABASE_PASS;
+	private $database_name	= DATABASE_NAME;
 
 	private $stmt;
 	private $dbh;
@@ -44,16 +45,16 @@ class DataBase {
 		/**
 		 * Set DSN
 		 */
-		$this->dsn = 'mysql:host='.$this->host.';dbname='.$this->dbname;
+		$this->dsn = 'mysql:host='.$this->host.';dbname='.$this->database_name;
 
 		/**
 		 * Set options
 		 */
 		$this->driver_options = array(
-			PDO::ATTR_EMULATE_PREPARES	=> false,
-			PDO::ATTR_ERRMODE		=> PDO::ERRMODE_EXCEPTION,
+			PDO::ATTR_EMULATE_PREPARES		=> false,
+			PDO::ATTR_ERRMODE				=> PDO::ERRMODE_EXCEPTION,
 			PDO::ATTR_DEFAULT_FETCH_MODE	=> PDO::FETCH_OBJ,
-			PDO::ATTR_PERSISTENT		=> true,
+			PDO::ATTR_PERSISTENT			=> true,
 			PDO::MYSQL_ATTR_INIT_COMMAND	=> 'SET NAMES utf8'
 		);
 
@@ -65,12 +66,19 @@ class DataBase {
 			 * @param string $pass
 			 * @param array $driver_options
 			 */
-			$this->dbh = new PDO($this->dsn, $this->user, $this->pass, $this->driver_options);
+			$this->dbh = new PDO($this->dsn, $this->user, $this->password, $this->driver_options);
 		} catch (PDOException $ex) {
 			/**
 			 * Catch any errors
 			 */
 			$this->error = $ex->getMessage();
+		}
+		
+		/**
+		 * Checking connection to database
+		 */
+		if (is_null($this->dbh)) {
+			throw new Exception('Cannot connect to database.');
 		}
 	}
 
@@ -114,7 +122,7 @@ class DataBase {
 	 * Bind the data from an array
 	 * @param array $param_array
 	 * @return bool
-	 * @see DataBase::bind()
+	 * @see Database::bind()
 	 */
 	public function bindArray($param_array) {
 		array_map(array($this, 'bind'), array_keys($param_array), array_values($param_array));
@@ -131,9 +139,9 @@ class DataBase {
 	/**
 	 * Get multiple records
 	 * @return object
-	 * @see DataBase::$driver_options
+	 * @see Database::$driver_options
 	 */
-	public function resultSet(){
+	public function fetchAll(){
 		$this->execute();
 		return $this->stmt->fetchAll();
 	}
@@ -141,9 +149,9 @@ class DataBase {
 	/**
 	 * Get single record
 	 * @return object
-	 * @see DataBase::$driver_options
+	 * @see Database::$driver_options
 	 */
-	public function single(){
+	public function fetch(){
 		$this->execute();
 		return $this->stmt->fetch();
 	}
@@ -195,5 +203,5 @@ class DataBase {
 	public function debugDumpParams(){
 		return $this->stmt->debugDumpParams();
 	}
+
 }
-?>

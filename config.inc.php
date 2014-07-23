@@ -27,21 +27,19 @@
  * Host name.
  * Usually 'localhost'
  */
-define('DB_HOST', 'localhost');
+define('DATABASE_HOST', 'localhost');
 
 /**
  * Database name
  */
-define('DB_NAME', 'your_db');
+define('DATABASE_NAME', 'your_database');
 
 /**
  * The user in your database
  */
-define('DB_USER', 'root');
+define('DATABASE_USER', 'root');
 
 /**
  * The user's password in your database
  */
-define('DB_PASS', '');
-
-?>
+define('DATABASE_PASS', '');
