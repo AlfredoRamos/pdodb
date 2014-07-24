@@ -227,13 +227,15 @@ class Database {
 		
 		$log = new stdClass;
 		$log->time = 0;
+		$log->queries = 0;
 		
-		foreach ($this->logger as $time) {
-			$log->time += $time;
-			var_dump($time);
+		if (isset($this->logger)) {
+			foreach ($this->logger as $time) {
+				$log->time += $time;
+			}
 		}
 		
-		$log->queries = count($this->logger);
+		$log->queries += count($this->logger);
 		
 		return $log;
 	}
