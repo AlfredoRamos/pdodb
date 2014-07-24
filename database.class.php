@@ -40,6 +40,8 @@ class Database {
 
 	private $dsn;
 	private $driver_options;
+	
+	private $logger;
 
 	public function __construct(){
 		/**
@@ -78,8 +80,9 @@ class Database {
 		 * Checking connection to database
 		 */
 		if (is_null($this->dbh)) {
-			throw new Exception('Cannot connect to database.');
+			throw new Exception('Unable to establish a connection to database.');
 		}
+		
 	}
 
 	/**
@@ -88,7 +91,18 @@ class Database {
 	 * @return PDOStatement|PDOException
 	 */
 	public function query($query) {
+		
+		$time['start'] = microtime(true);
+		
 		$this->stmt = $this->dbh->prepare($query);
+		
+		$time['end'] = microtime(true);
+		
+		$time['elapsed'] = $time['end'] - $time['start'];
+		
+		$this->logger[] = round($time['elapsed'], 16);
+		
+		return $this->stmt;
 	}
 
 	/**
@@ -138,7 +152,7 @@ class Database {
 
 	/**
 	 * Get multiple records
-	 * @return object
+	 * @return array
 	 * @see Database::$driver_options
 	 */
 	public function fetchAll(){
@@ -202,6 +216,26 @@ class Database {
 	 */
 	public function debugDumpParams(){
 		return $this->stmt->debugDumpParams();
+	}
+	
+	/**
+	 * Gets the count of queries and its running time
+	 * @return object
+	 * @todo Log other errors produced in the class
+	 */
+	public function debugSQL() {
+		
+		$log = new stdClass;
+		$log->time = 0;
+		
+		foreach ($this->logger as $time) {
+			$log->time += $time;
+			var_dump($time);
+		}
+		
+		$log->queries = count($this->logger);
+		
+		return $log;
 	}
 
 }
