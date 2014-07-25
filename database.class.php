@@ -24,7 +24,7 @@
  */
 
 /**
- * @example examples.php
+ * @example demo/example.class.php
  */
 
 class Database {
@@ -101,8 +101,7 @@ class Database {
 		$time['elapsed'] = $time['end'] - $time['start'];
 		
 		$this->logger[] = round($time['elapsed'], 16);
-		
-		return $this->stmt;
+
 	}
 
 	/**
@@ -209,7 +208,7 @@ class Database {
 	public function cancelTransaction(){
 		return $this->dbh->rollBack();
 	}
-
+	
 	/**
 	 * Dumps info contained in prepared statement
 	 * @return void
