@@ -101,6 +101,8 @@ class Database {
 		$time['elapsed'] = $time['end'] - $time['start'];
 		
 		$this->logger[] = round($time['elapsed'], 16);
+		
+		return $this->stmt;
 
 	}
 
