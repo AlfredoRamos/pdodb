@@ -40,8 +40,6 @@ class Database {
 
 	private $dsn;
 	private $driver_options;
-	
-	private $logger;
 
 	public function __construct(){
 		/**
@@ -91,19 +89,8 @@ class Database {
 	 * @return PDOStatement|PDOException
 	 */
 	public function query($query) {
-		
-		$time['start'] = microtime(true);
-		
 		$this->stmt = $this->dbh->prepare($query);
-		
-		$time['end'] = microtime(true);
-		
-		$time['elapsed'] = $time['end'] - $time['start'];
-		
-		$this->logger[] = round($time['elapsed'], 16);
-		
 		return $this->stmt;
-
 	}
 
 	/**
@@ -217,28 +204,6 @@ class Database {
 	 */
 	public function debugDumpParams(){
 		return $this->stmt->debugDumpParams();
-	}
-	
-	/**
-	 * Gets the count of queries and its running time
-	 * @return object
-	 * @todo Log other errors produced in the class
-	 */
-	public function debugSQL() {
-		
-		$log = new stdClass;
-		$log->time = 0;
-		$log->queries = 0;
-		
-		if (isset($this->logger)) {
-			foreach ($this->logger as $time) {
-				$log->time += $time;
-			}
-		}
-		
-		$log->queries += count($this->logger);
-		
-		return $log;
 	}
 
 }

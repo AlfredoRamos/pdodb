@@ -7,7 +7,7 @@ Usage Example
 ```php
 <?php
 	require_once 'config.inc.php';
-	require_once 'database.class.php';
+	require_once 'Database.class.php';
 
 	$db = new Database;
 

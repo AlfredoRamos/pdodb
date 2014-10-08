@@ -24,7 +24,7 @@
  */
 
 	require_once '../config.inc.php';
-	require_once '../database.class.php';
+	require_once '../Database.class.php';
 
 class Demo {
 	
@@ -162,9 +162,5 @@ class Demo {
 				FROM pdo_customers';
 		$this->db->query($sql);
 		return $this->db->fetchAll();
-	}
-	
-	public function debugSQL() {
-		return $this->db->debugSQL();
 	}
 }

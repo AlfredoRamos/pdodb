@@ -22,8 +22,6 @@
 	$demo = new Demo;
 	
 	$customers = $demo->get_raw_data();
-	
-	$debug = $demo->debugSQL();
 ?>
 
 <html>
@@ -36,12 +34,6 @@
 		<table>
 			
 			<thead>
-				<tr style="background-color:darkgrey">
-					<th>Time (&micro;s) </th>
-					<td colspan="2"><?php echo $debug->time ?></td>
-					<th>Queries</th>
-					<td colspan="2"><?php echo $debug->queries ?></td>
-				</tr>
 				<tr>
 					<th>customer_id</th>
 					<th>contact_name</th>
