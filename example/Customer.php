@@ -1,38 +1,35 @@
 <?php
 /**
- * Simple PDO Class - Demo Class
+ * Simple PDO Class - Customers example class
  * @package simple-pdo-class
  * @author Alfredo Ramos <alfredo.ramos@yandex.com>
  * @link https://github.com/AlfredoRamos/simple-pdo-class
- * @copyright Copyright (c) 2014, Alfredo Ramos
- * @licence http://www.gnu.org/licenses/gpl-3.0.html GNU General Public License, version 3
+ * @copyright Copyright (c) 2014 Alfredo Ramos
+ * @licence GNU GPL-3.0+
  *
- * This file is part of Simple PDO Class.
- *
- * Simple PDO Class is free software: you can redistribute it and/or modify
+ * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- *
- * Simple PDO Class is distributed in the hope that it will be useful,
+
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- *
+
  * You should have received a copy of the GNU General Public License
- * along with Simple PDO Class.  If not, see <http://www.gnu.org/licenses/>.
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-	require_once '../config.inc.php';
-	require_once '../Database.class.php';
+require_once __DIR__ . '/../PDODb.php';
 
-class Demo {
+class Customer {
 	
 	private $db;
 	
 	public function __construct() {
 		
-		$this->db = new Database;
+		$this->db = new AlfredoRamos\PDODb;
 		
 		if (!$this->table_exists()) {
 			$this->create_table();
@@ -45,12 +42,12 @@ class Demo {
 	
 	public function table_exists() {
 		
-		$sql = 'SHOW TABLES LIKE "pdo_customers"';
+		$sql = 'SHOW TABLES LIKE "' . $this->db->table_prefix . 'customers"';
 		$this->db->query($sql);
 		$this->db->fetch();
 		$row = $this->db->rowCount();
 		
-		$exists = ($row > 0) ? true : false;
+		$exists = ($row > 0);
 		
 		return $exists;
 		
@@ -58,7 +55,7 @@ class Demo {
 	
 	public function create_table() {
 		
-		$sql = 'CREATE TABLE IF NOT EXISTS pdo_customers (
+		$sql = 'CREATE TABLE IF NOT EXISTS ' . $this->db->table_prefix . 'customers (
 					customer_id int(11) NOT NULL AUTO_INCREMENT,
 					contact_name varchar(50) COLLATE utf8_unicode_ci NOT NULL,
 					postal_address text COLLATE utf8_unicode_ci NOT NULL,
@@ -76,10 +73,10 @@ class Demo {
 		
 		// Just for testing
 		$sql = 'SELECT COUNT(customer_id) AS total_rows
-				FROM pdo_customers';
+				FROM ' . $this->db->table_prefix . 'customers';
 		$this->db->query($sql);
 		$row = $this->db->fetch();
-		$exist = ($row->total_rows >= 5) ? true : false;
+		$exist = ($row->total_rows >= 5);
 		
 		return $exist;
 		
@@ -90,7 +87,7 @@ class Demo {
 		// Start transaction
 		$this->db->beginTransaction();
 		
-		$sql = 'INSERT INTO pdo_customers (
+		$sql = 'INSERT INTO ' . $this->db->table_prefix . 'customers (
 					contact_name,
 					postal_address,
 					city,
@@ -159,7 +156,7 @@ class Demo {
 	
 	public function get_raw_data() {
 		$sql = 'SELECT customer_id, contact_name, postal_address, city, country, postal_code
-				FROM pdo_customers';
+				FROM ' . $this->db->table_prefix . 'customers';
 		$this->db->query($sql);
 		return $this->db->fetchAll();
 	}
