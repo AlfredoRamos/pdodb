@@ -38,4 +38,4 @@ Simple PDO Class with prepared statements.
 ```
 
 ## Demo
-Go to "demo" directory for a working example.
+See "example" directory for a working example.
