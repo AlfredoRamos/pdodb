@@ -1,6 +1,6 @@
 <?php
 /**
- * Simple PDO Class
+ * Simple PDO Class - Singleton Trait
  * @package simple-pdo-class
  * @author Alfredo Ramos <alfredo.ramos@yandex.com>
  * @link https://github.com/AlfredoRamos/simple-pdo-class
@@ -30,16 +30,22 @@ if (!defined('IN_PDODB')) {
 }
 
 trait SingletonTrait {
-	protected static $instance = null;
+	private static $instance = null;
 	
-	protected function __construct(){}
-	protected function __clone(){}
+	final private function __construct(){
+		static::init();
+	}
 	
-	public static function instance() {
+	final private function __clone() {}
+	final private function __wakeup() {}
+	
+	final public static function instance() {
 		if (static::$instance === null) {
-			static::$instance = new static();
+			static::$instance = new static;
 		}
 		
 		return static::$instance;
 	}
+	
+	protected function init() {}
 }

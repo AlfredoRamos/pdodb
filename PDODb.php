@@ -49,7 +49,7 @@ class PDODb {
 	
 	public $table_prefix;
 	
-	protected function __construct() {
+	protected function init() {
 		$this->config = require __DIR__ . '/config.inc.php';
 		$this->config = is_array($this->config) ? $this->config : [];
 		

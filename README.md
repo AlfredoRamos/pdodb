@@ -1,7 +1,10 @@
 ## Simple PDO Class
 Simple PDO Class with prepared statements.
 
-## Usage Example
+## Configuration
+Rename the ```config.inc.example.php``` file to ```config.inc.php``` and edit the values as needed.
+
+## Usage
 ```php
 <?php
 	require_once 'PDODb.class.php';
@@ -33,9 +36,6 @@ Simple PDO Class with prepared statements.
 	$db->bindArray($param_array);
 
 	$db->execute();
-
-?>
 ```
 
-## Example
-See "example" directory.
+For a working example see "example" directory.
