@@ -29,7 +29,7 @@ class Customer {
 	
 	public function __construct() {
 		
-		$this->db = new AlfredoRamos\PDODb;
+		$this->db = AlfredoRamos\PDODb::instance();
 		
 		if (!$this->table_exists()) {
 			$this->create_table();

@@ -25,9 +25,12 @@ namespace AlfredoRamos;
 /**
  * @ignore
  */
-if (!defined('IN_PDODB')) {
-	define('IN_PDODB', true);
-}
+define('IN_PDODB', true);
+
+/**
+ * Singleton trait
+ */
+require_once __DIR__ . '/SingletonTrait.php';
 
 use \PDO;
 use \PDOException;
@@ -37,6 +40,8 @@ use \Exception;
  * @example example/Customer.php
  */
 class PDODb {
+	use SingletonTrait;
+	
 	private $dbh;
 	private $stmt;
 	
@@ -44,7 +49,7 @@ class PDODb {
 	
 	public $table_prefix;
 	
-	public function __construct() {
+	protected function __construct() {
 		$this->config = require __DIR__ . '/config.inc.php';
 		$this->config = is_array($this->config) ? $this->config : [];
 		

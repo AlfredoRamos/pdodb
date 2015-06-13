@@ -6,7 +6,7 @@ Simple PDO Class with prepared statements.
 <?php
 	require_once 'PDODb.class.php';
 
-	$db = new AlfredoRamos\PDODb;
+	$db = AlfredoRamos\PDODb::instance();
 
 	// SELECT statement
 
@@ -37,5 +37,5 @@ Simple PDO Class with prepared statements.
 ?>
 ```
 
-## Demo
-See "example" directory for a working example.
+## Example
+See "example" directory.
