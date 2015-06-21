@@ -21,8 +21,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-require_once __DIR__ . '/../PDODb.php';
-
 class Customer {
 	
 	private $db;
@@ -76,7 +74,9 @@ class Customer {
 				FROM ' . $this->db->table_prefix . 'customers';
 		$this->db->query($sql);
 		$row = $this->db->fetch();
+		$this->db->freeResult();
 		$exist = ($row->total_rows >= 5);
+		var_dump($row);
 		
 		return $exist;
 		

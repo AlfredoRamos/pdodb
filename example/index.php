@@ -21,6 +21,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+require_once __DIR__ . '/../PDODb/autoloader.php';
 require_once __DIR__ . '/Customer.php';
 
 $customer = new Customer;

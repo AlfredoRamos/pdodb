@@ -27,11 +27,6 @@ namespace AlfredoRamos;
  */
 define('IN_PDODB', true);
 
-/**
- * Singleton trait
- */
-require_once __DIR__ . '/SingletonTrait.php';
-
 use \PDO;
 use \PDOException;
 use \Exception;
@@ -39,7 +34,7 @@ use \Exception;
 /**
  * @example example/Customer.php
  */
-class PDODb {
+class PDODb implements PDODbInterface {
 	use SingletonTrait;
 	
 	private $dbh;
