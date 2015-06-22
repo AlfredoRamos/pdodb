@@ -1,10 +1,9 @@
 <?php
 /**
  * Simple PDO Class - Customers example class
- * @package simple-pdo-class
  * @author Alfredo Ramos <alfredo.ramos@yandex.com>
  * @link https://github.com/AlfredoRamos/simple-pdo-class
- * @copyright Copyright (c) 2014 Alfredo Ramos
+ * @copyright Copyright (c) 2013 Alfredo Ramos
  * @licence GNU GPL-3.0+
  *
  * This program is free software: you can redistribute it and/or modify
@@ -31,9 +30,11 @@ class Customer {
 		
 		if (!$this->table_exists()) {
 			$this->create_table();
+			
 			if (!$this->initial_data_exist()) {
 				$this->set_initial_data();
 			}
+			
 		}
 		
 	}
@@ -76,7 +77,6 @@ class Customer {
 		$row = $this->db->fetch();
 		$this->db->freeResult();
 		$exist = ($row->total_rows >= 5);
-		var_dump($row);
 		
 		return $exist;
 		
@@ -102,49 +102,49 @@ class Customer {
 				)';
 		$this->db->query($sql);
 		
-		$this->db->bindArray(array(
+		$this->db->bindArray([
 			':contact_name'		=> 'Thomas Hardy',
 			':postal_address'	=> '120 Hanover Sq.',
 			':city'				=> 'London',
 			':country'			=> 'United Kingdom',
 			':postal_code'		=> 'WA1 1DP'
-		));
+		]);
 		$this->db->execute();
 		
-		$this->db->bindArray(array(
+		$this->db->bindArray([
 			':contact_name'		=> 'Christina Berglund',
 			':postal_address'	=> 'Berguvsvägen 8',
 			':city'				=> 'Luleå',
 			':country'			=> 'Sweden',
 			':postal_code'		=> 'S-958 22'
-		));
+		]);
 		$this->db->execute();
 		
-		$this->db->bindArray(array(
+		$this->db->bindArray([
 			':contact_name'		=> 'Ana Ramos',
 			':postal_address'	=> 'Avda. de la Constitución 2222',
 			':city'				=> 'México D.F.',
 			':country'			=> 'Mexico',
 			':postal_code'		=> '05021'
-		));	
+		]);
 		$this->db->execute();
 		
-		$this->db->bindArray(array(
+		$this->db->bindArray([
 			':contact_name'		=> 'Howard Snyder',
 			':postal_address'	=> '2732 Baker Blvd.',
 			':city'				=> 'Eugene',
 			':country'			=> 'United States of America',
 			':postal_code'		=> '97403'
-		));
+		]);
 		$this->db->execute();
 		
-		$this->db->bindArray(array(
+		$this->db->bindArray([
 			':contact_name'		=> 'Renate Messner',
 			':postal_address'	=> 'Magazinweg 7',
 			':city'				=> 'Frankfurt a.M.',
 			':country'			=> 'Germany',
 			':postal_code'		=> '60528'
-		));
+		]);
 		$this->db->execute();
 		
 		$last_insert_id = (int) $this->db->lastInsertId();
@@ -155,9 +155,12 @@ class Customer {
 	}
 	
 	public function get_raw_data() {
+		
 		$sql = 'SELECT customer_id, contact_name, postal_address, city, country, postal_code
 				FROM ' . $this->db->table_prefix . 'customers';
 		$this->db->query($sql);
+		
 		return $this->db->fetchAll();
+		
 	}
 }

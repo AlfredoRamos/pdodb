@@ -1,10 +1,9 @@
 <?php
 /**
  * Simple PDO Class - Singleton Trait
- * @package simple-pdo-class
  * @author Alfredo Ramos <alfredo.ramos@yandex.com>
  * @link https://github.com/AlfredoRamos/simple-pdo-class
- * @copyright Copyright (c) 2014 Alfredo Ramos
+ * @copyright Copyright (c) 2013 Alfredo Ramos
  * @licence GNU GPL-3.0+
  *
  * This program is free software: you can redistribute it and/or modify

@@ -28,12 +28,11 @@ Rename the ```PDODb/config.inc.php.example``` file to ```PDODb/config.inc.php```
 	$db->bind(':value_3', 'Value 3');
 
 	// Binding values with an array
-	$param_array = [
+	$db->bindArray([
 		':value_1'	=> 'Value 1',
 		':value_2'	=> 'Value 2',
-		':value_3'	=> 'Value 3',
-	];
-	$db->bindArray($param_array);
+		':value_3'	=> 'Value 3'
+	]);
 
 	$db->execute();
 ```
