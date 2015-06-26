@@ -100,7 +100,7 @@ class PDODb implements PDODbInterface {
 	 * @param int|bool|null|string $type
 	 * @return bool
 	 */
-	public function bind($param = '', $value = '', $type = null){
+	public function bind($param = '', $value = '', $type = null) {
 		if (is_null($type)) {
 			switch (true) {
 				case is_int($value):
@@ -118,7 +118,7 @@ class PDODb implements PDODbInterface {
 			}
 		}
 		
-		$this->stmt->bindValue($param, $value, $type);
+		return $this->stmt->bindValue($param, $value, $type);
 	}
 	
 	/**
@@ -128,14 +128,14 @@ class PDODb implements PDODbInterface {
 	 * @return bool
 	 */
 	public function bindArray($param = []) {
-		array_map(array($this, 'bind'), array_keys($param), array_values($param));
+		array_map([$this, 'bind'], array_keys($param), array_values($param));
 	}
 
 	/**
 	 * Executhe the query
 	 * @return bool
 	 */
-	public function execute(){
+	public function execute() {
 		return $this->stmt->execute();
 	}
 
@@ -143,7 +143,7 @@ class PDODb implements PDODbInterface {
 	 * Get multiple records
 	 * @return array
 	 */
-	public function fetchAll(){
+	public function fetchAll() {
 		$this->execute();
 		return $this->stmt->fetchAll();
 	}
@@ -152,7 +152,7 @@ class PDODb implements PDODbInterface {
 	 * Get single record
 	 * @return object
 	 */
-	public function fetch(){
+	public function fetch() {
 		$this->execute();
 		return $this->stmt->fetch();
 	}
@@ -161,7 +161,7 @@ class PDODb implements PDODbInterface {
 	 * Get number of affected rows
 	 * @return int
 	 */
-	public function rowCount(){
+	public function rowCount() {
 		return $this->stmt->rowCount();
 	}
 
@@ -169,7 +169,7 @@ class PDODb implements PDODbInterface {
 	 * Get last inserted id
 	 * @return int
 	 */
-	public function lastInsertId(){
+	public function lastInsertId() {
 		return $this->dbh->lastInsertId();
 	}
 
@@ -177,7 +177,7 @@ class PDODb implements PDODbInterface {
 	 * Run batch queries
 	 * @return bool
 	 */
-	public function beginTransaction(){
+	public function beginTransaction() {
 		return $this->dbh->beginTransaction();
 	}
 
@@ -185,7 +185,7 @@ class PDODb implements PDODbInterface {
 	 * Stop batch queries
 	 * @return bool
 	 */
-	public function endTransaction(){
+	public function endTransaction() {
 		return $this->dbh->commit();
 	}
 
@@ -193,7 +193,7 @@ class PDODb implements PDODbInterface {
 	 * Cancel batch queries
 	 * @return bool
 	 */
-	public function cancelTransaction(){
+	public function cancelTransaction() {
 		return $this->dbh->rollBack();
 	}
 	
@@ -201,7 +201,7 @@ class PDODb implements PDODbInterface {
 	 * Dumps info contained in prepared statement
 	 * @return void
 	 */
-	public function debugDumpParams(){
+	public function debugDumpParams() {
 		return $this->stmt->debugDumpParams();
 	}
 

@@ -75,7 +75,6 @@ class Customer {
 				FROM ' . $this->db->table_prefix . 'customers';
 		$this->db->query($sql);
 		$row = $this->db->fetch();
-		$this->db->freeResult();
 		$exist = ($row->total_rows >= 5);
 		
 		return $exist;
