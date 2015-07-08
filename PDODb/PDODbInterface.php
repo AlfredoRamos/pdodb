@@ -1,4 +1,4 @@
-<?php
+<?php namespace AlfredoRamos;
 /**
  * Simple PDO Class - PDODb Interface
  * @author Alfredo Ramos <alfredo.ramos@yandex.com>
@@ -19,7 +19,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-namespace AlfredoRamos;
 
 interface PDODbInterface {
 	public function query($query = '');

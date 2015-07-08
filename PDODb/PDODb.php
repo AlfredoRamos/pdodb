@@ -1,4 +1,4 @@
-<?php
+<?php namespace AlfredoRamos;
 /**
  * Simple PDO Class
  * @author Alfredo Ramos <alfredo.ramos@yandex.com>
@@ -19,7 +19,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-namespace AlfredoRamos;
 
 /**
  * @ignore
@@ -38,7 +37,6 @@ class PDODb implements PDODbInterface {
 	
 	private $dbh;
 	private $stmt;
-	
 	private $config;
 	
 	public $table_prefix;
@@ -52,13 +50,12 @@ class PDODb implements PDODbInterface {
 		 */
 		$this->table_prefix = $this->config['table_prefix'];
 		
-		$dsn = sprintf(
-			'%s:host=%s;port=%u;dbname=%s',
+		$dsn = vsprintf('%s:host=%s;port=%u;dbname=%s', [
 			$this->config['driver'],
 			$this->config['host'],
 			$this->config['port'],
 			$this->config['database']
-		);
+		]);
 		
 		try {
 			/**
