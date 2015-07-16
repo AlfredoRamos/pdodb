@@ -20,13 +20,14 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+require_once __DIR__ . '/../PDODb/autoload.php';
+
 class Customer {
 	
 	private $db;
 	
 	public function __construct() {
-		
-		$this->db = AlfredoRamos\PDODb::instance();
+		$this->db = \AlfredoRamos\PDODb::instance();
 		
 		if (!$this->table_exists()) {
 			$this->create_table();
@@ -61,6 +62,9 @@ class Customer {
 					city varchar(50) COLLATE utf8_unicode_ci NOT NULL,
 					country varchar(50) COLLATE utf8_unicode_ci NOT NULL,
 					postal_code varchar(15) COLLATE utf8_unicode_ci NOT NULL,
+					created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+					updated_at TIMESTAMP on update CURRENT_TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+					deleted_at TIMESTAMP NULL DEFAULT NULL,
 					PRIMARY KEY (customer_id)
 				) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1;';
 		$this->db->query($sql);
@@ -155,11 +159,70 @@ class Customer {
 	
 	public function get_raw_data() {
 		
-		$sql = 'SELECT customer_id, contact_name, postal_address, city, country, postal_code
+		$sql = 'SELECT customer_id, contact_name, postal_address, city, country, postal_code, created_at, updated_at, deleted_at
 				FROM ' . $this->db->table_prefix . 'customers';
 		$this->db->query($sql);
 		
 		return $this->db->fetchAll();
 		
+	}
+	
+	public function get_customers() {
+		$sql = 'SELECT customer_id, contact_name, postal_address, city, country, postal_code
+				FROM ' . $this->db->table_prefix . 'customers WHERE deleted_at IS NULL';
+		$this->db->query($sql);
+		
+		return $this->db->fetchAll();
+	}
+	
+	public function get_deleted_customers() {
+		$sql = 'SELECT customer_id, contact_name, postal_address, city, country, postal_code
+				FROM ' . $this->db->table_prefix . 'customers WHERE deleted_at IS NOT NULL';
+		$this->db->query($sql);
+		
+		return $this->db->fetchAll();
+	}
+	
+	public function delete_customer($customer_id) {
+		$sql = 'UPDATE ' . $this->db->table_prefix . 'customers
+				SET deleted_at = CURRENT_TIMESTAMP WHERE customer_id = :customer_id';
+		$this->db->query($sql);
+		$this->db->bind(':customer_id', $customer_id);
+		$this->db->execute();
+		
+		$this->redirect();
+	}
+	
+	public function restore_customer($customer_id) {
+		$sql = 'UPDATE ' . $this->db->table_prefix . 'customers
+				SET deleted_at = NULL WHERE customer_id = :customer_id';
+		$this->db->query($sql);
+		$this->db->bind(':customer_id', $customer_id);
+		$this->db->execute();
+		
+		$this->redirect();
+	}
+	
+	public function redirect($uri = '') {
+		$url = $this->get_url();
+		
+		if (isset($uri)) {
+			$url .= $uri;
+		}
+		
+		header('Location: ' . $url);
+		exit;
+	}
+	
+	public function get_url() {
+		$page_url = (@$_SERVER['HTTPS'] == 'on') ? 'https://' : 'http://';
+		$page_url .= $_SERVER['SERVER_NAME'];
+		$page_url .= ($_SERVER['SERVER_PORT'] != '80') ? ':'.$_SERVER['SERVER_PORT'] : '';
+		$page_url .= $_SERVER['REQUEST_URI'];
+		
+		$url = parse_url($page_url);
+		$clean_url = $url['scheme'] . '://' . $url['host'] . $url['path'];
+		
+		return $clean_url;
 	}
 }

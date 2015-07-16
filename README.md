@@ -7,7 +7,7 @@ Rename the ```PDODb/config.inc.php.example``` file to ```PDODb/config.inc.php```
 ## Usage
 ```php
 <?php
-	require_once 'PDODb/autoloader.php';
+	require_once 'PDODb/autoload.php';
 
 	$db = AlfredoRamos\PDODb::instance();
 
