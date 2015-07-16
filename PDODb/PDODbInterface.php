@@ -25,8 +25,8 @@ interface PDODbInterface {
 	public function bind($param = '', $value = '', $type = null);
 	public function bindArray($param = []);
 	public function execute();
-	public function fetchAll();
-	public function fetch();
+	public function fetchAll($mode = null);
+	public function fetch($mode = null);
 	public function rowCount();
 	public function lastInsertId();
 	public function beginTransaction();

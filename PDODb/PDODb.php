@@ -42,6 +42,9 @@ class PDODb implements PDODbInterface {
 	public $table_prefix;
 	
 	protected function init() {
+		/**
+		 * Read configuration file
+		 */
 		$this->config = require __DIR__ . '/config.inc.php';
 		$this->config = is_array($this->config) ? $this->config : [];
 		
@@ -75,7 +78,7 @@ class PDODb implements PDODbInterface {
 			/**
 			 * Catch any errors
 			 */
-			throw new Exception($ex->getMessage(), $ex->getCode());
+			trigger_error($ex->getMessage(), E_USER_ERROR);
 		}
 		
 	}
@@ -94,7 +97,7 @@ class PDODb implements PDODbInterface {
 	 * Bind the data
 	 * @param string $param
 	 * @param string $value
-	 * @param int|bool|null|string $type
+	 * @param integer|bool|null|string $type
 	 * @return bool
 	 */
 	public function bind($param = '', $value = '', $type = null) {
@@ -138,25 +141,45 @@ class PDODb implements PDODbInterface {
 
 	/**
 	 * Get multiple records
+	 * @param integer $mode <https://secure.php.net/manual/en/pdostatement.fetch.php>
 	 * @return array
 	 */
-	public function fetchAll() {
+	public function fetchAll($mode = null) {
 		$this->execute();
+		
+		try {
+			if (is_int($mode)) {
+				$this->stmt->setFetchMode($mode);
+			}
+		} catch (PDOException $ex) {
+			trigger_error($ex->getMessage(), E_USER_ERROR);
+		}
+		
 		return $this->stmt->fetchAll();
 	}
 
 	/**
 	 * Get single record
+	 * @param integer $mode <https://secure.php.net/manual/en/pdostatement.fetch.php>
 	 * @return object
 	 */
-	public function fetch() {
+	public function fetch($mode = null) {
 		$this->execute();
+		
+		try {
+			if (is_int($mode)) {
+				$this->stmt->setFetchMode($mode);
+			}
+		} catch (PDOException $ex) {
+			trigger_error($ex->getMessage(), E_USER_ERROR);
+		}
+		
 		return $this->stmt->fetch();
 	}
 
 	/**
 	 * Get number of affected rows
-	 * @return int
+	 * @return integer
 	 */
 	public function rowCount() {
 		return $this->stmt->rowCount();
@@ -164,7 +187,7 @@ class PDODb implements PDODbInterface {
 
 	/**
 	 * Get last inserted id
-	 * @return int
+	 * @return integer
 	 */
 	public function lastInsertId() {
 		return $this->dbh->lastInsertId();

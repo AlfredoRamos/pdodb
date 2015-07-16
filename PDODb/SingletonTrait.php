@@ -30,7 +30,7 @@ if (!defined('IN_PDODB')) {
 trait SingletonTrait {
 	private static $instance = null;
 	
-	final private function __construct(){
+	final private function __construct() {
 		static::init();
 	}
 	
@@ -44,6 +44,4 @@ trait SingletonTrait {
 		
 		return static::$instance;
 	}
-	
-	protected function init() {}
 }

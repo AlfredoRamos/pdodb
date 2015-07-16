@@ -37,4 +37,4 @@ Rename the ```PDODb/config.inc.php.example``` file to ```PDODb/config.inc.php```
 	$db->execute();
 ```
 
-For a working example see "example" directory.
+For a working example see the ```example``` directory.
