@@ -47,9 +47,7 @@ class Customer {
 		$this->db->fetch();
 		$row = $this->db->rowCount();
 		
-		$exists = ($row > 0);
-		
-		return $exists;
+		return ($row > 0);
 		
 	}
 	
@@ -78,10 +76,9 @@ class Customer {
 		$sql = 'SELECT COUNT(customer_id) AS total_rows
 				FROM ' . $this->db->table_prefix . 'customers';
 		$this->db->query($sql);
-		$row = $this->db->fetch();
-		$exist = ($row->total_rows >= 5);
+		$rows = $this->db->fetchField('total_rows');
 		
-		return $exist;
+		return ($rows >= 5);
 		
 	}
 	
@@ -203,14 +200,8 @@ class Customer {
 		$this->redirect();
 	}
 	
-	public function redirect($uri = '') {
-		$url = $this->get_url();
-		
-		if (isset($uri)) {
-			$url .= $uri;
-		}
-		
-		header('Location: ' . $url);
+	public function redirect($uri = '') {		
+		header('Location: ' . $this->get_url() . $uri);
 		exit;
 	}
 	

@@ -44,4 +44,6 @@ trait SingletonTrait {
 		
 		return static::$instance;
 	}
+	
+	protected function init() {}
 }

@@ -1,10 +1,13 @@
 ## Simple PDO Class
+
 Simple PDO Class with prepared statements.
 
 ## Configuration
-Rename the ```PDODb/config.inc.php.example``` file to ```PDODb/config.inc.php``` and edit the values as needed.
+
+Copy the file ```PDODb/config.inc.php.example``` to ```PDODb/config.inc.php``` and edit the values as needed.
 
 ## Usage
+
 ```php
 <?php
 	require_once 'PDODb/autoload.php';

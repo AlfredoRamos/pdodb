@@ -42,18 +42,13 @@ class PDODb implements PDODbInterface {
 	public $table_prefix;
 	
 	protected function init() {
-		/**
-		 * Read configuration file
-		 */
-		$this->config = require __DIR__ . '/config.inc.php';
-		$this->config = is_array($this->config) ? $this->config : [];
+		// Set the configuration file
+		$this->setConfigFile(__DIR__ . '/config.inc.php');
 		
-		/**
-		 * Set PDODb::$table_prefix
-		 */
+		// Set PDODb::$table_prefix
 		$this->table_prefix = $this->config['table_prefix'];
 		
-		$dsn = vsprintf('%s:host=%s;port=%u;dbname=%s', [
+		$dsn = vsprintf('%1$s:host=%2$s;port=%3$u;dbname=%4$s', [
 			$this->config['driver'],
 			$this->config['host'],
 			$this->config['port'],
@@ -63,42 +58,119 @@ class PDODb implements PDODbInterface {
 		try {
 			/**
 			 * Create a new PDO instanace
-			 * @param string $dsn
-			 * @param string PDODb::$config['user']
-			 * @param string PDODb::$config['password']
-			 * @param array PDODb::$config['driver_options']
+			 * @param	string	$dsn
+			 * @param	string	PDODb::$config['user']
+			 * @param	string	PDODb::$config['password']
+			 * @param	array	PDODb::$config['options']
 			 */
 			$this->dbh = new PDO(
 				$dsn,
 				$this->config['user'],
 				$this->config['password'],
-				$this->config['driver_options']
+				$this->config['options']
 			);
 		} catch (PDOException $ex) {
-			/**
-			 * Catch any errors
-			 */
 			trigger_error($ex->getMessage(), E_USER_ERROR);
 		}
 		
 	}
+	
+	/**
+	 * Set the configuration file
+	 * @param	string	$file
+	 */
+	public function setConfigFile($file = '') {
+		$this->config = $this->getConfig($file);
+	}
+	
+	/**
+	 * Read the configuration file
+	 * @param	string	$config
+	 * @return	array|null
+	 */
+	protected function getConfig($file = '') {
+		// Default options
+		$defaults = __DIR__ . '/config.inc.php.example';
+		
+		if (file_exists($defaults)) {
+			$defaults = require $defaults;
+			$defaults = is_array($defaults) ? $defaults : [];
+		} else {
+			// The're replaced latter, so do not change them
+			$defaults = [
+				// PDO driver
+				// <https://php.net/manual/en/pdo.getavailabledrivers.php>
+				'driver'		=> 'mysql',
+				
+				//Database host.
+				// Default: localhost
+				'host'			=> 'localhost',
+		
+				// Port to connect to your database server
+				// Default: 3306 (MySQL/MariaDB)
+				'port'			=> 3306,
+				
+				// Database name
+				'database'		=> '',
+		
+				// Database user
+				'user'			=> '',
+		
+				// Database user's password
+				'password'		=> '',
+		
+				// Table prefix
+				'table_prefix'	=> '',
+		
+				// PDO driver options
+				// <https://php.net/manual/en/pdo.setattribute.php>
+				'options'		=> [
+					PDO::ATTR_EMULATE_PREPARES		=> false,
+					PDO::ATTR_ERRMODE				=> PDO::ERRMODE_EXCEPTION,
+					PDO::ATTR_DEFAULT_FETCH_MODE	=> PDO::FETCH_OBJ,
+					PDO::ATTR_PERSISTENT			=> true,
+					PDO::MYSQL_ATTR_INIT_COMMAND	=> 'SET NAMES utf8'
+				]
+			];
+		}
+		
+		// Configuration array
+		$config = [];
+		
+		if (!empty($file) && file_exists($file)) {
+			// Load the array from file
+			$config = require $file;
+			
+			// Check if it's an array
+			$config = is_array($config) ? $config : [];
+		}
+		
+		// Return the config array with the values
+		// replaced with the ones from the file
+		return array_replace_recursive($defaults, $config);
+	}
 
 	/**
 	 * Make a query
-	 * @param string $query
-	 * @return PDOStatement|PDOException
+	 * @param	string	$query
+	 * @return	PDOStatement|PDOException
 	 */
 	public function query($query = '') {
-		$this->stmt = $this->dbh->prepare($query);
+		try {
+			$this->stmt = $this->dbh->prepare($query);
+		} catch (PDOException $ex) {
+			trigger_error($ex->getMessage(), E_USER_ERROR);
+		}
+		
 		return $this->stmt;
 	}
 
 	/**
 	 * Bind the data
-	 * @param string $param
-	 * @param string $value
-	 * @param integer|bool|null|string $type
-	 * @return bool
+	 * @param	string	$param
+	 * @param	string	$value
+	 * @param	integer|bool|null|string	$type
+	 * @return	bool
 	 */
 	public function bind($param = '', $value = '', $type = null) {
 		if (is_null($type)) {
@@ -118,14 +190,18 @@ class PDODb implements PDODbInterface {
 			}
 		}
 		
-		return $this->stmt->bindValue($param, $value, $type);
+		try {
+			return $this->stmt->bindValue($param, $value, $type);
+		} catch (PDOException $ex) {
+			trigger_error($ex->getMessage(), E_USER_ERROR);
+		}
 	}
 	
 	/**
 	 * Bind the data from an array
-	 * @see PDODb::bind()
-	 * @param array $param
-	 * @return bool
+	 * @see		PDODb::bind()
+	 * @param	array	$param
+	 * @return	bool
 	 */
 	public function bindArray($param = []) {
 		array_map([$this, 'bind'], array_keys($param), array_values($param));
@@ -133,7 +209,7 @@ class PDODb implements PDODbInterface {
 
 	/**
 	 * Executhe the query
-	 * @return bool
+	 * @return	bool
 	 */
 	public function execute() {
 		return $this->stmt->execute();
@@ -141,8 +217,8 @@ class PDODb implements PDODbInterface {
 
 	/**
 	 * Get multiple records
-	 * @param integer $mode <https://secure.php.net/manual/en/pdostatement.fetch.php>
-	 * @return array
+	 * @param	integer	$mode	<https://secure.php.net/manual/en/pdostatement.fetch.php>
+	 * @return	array
 	 */
 	public function fetchAll($mode = null) {
 		$this->execute();
@@ -160,8 +236,8 @@ class PDODb implements PDODbInterface {
 
 	/**
 	 * Get single record
-	 * @param integer $mode <https://secure.php.net/manual/en/pdostatement.fetch.php>
-	 * @return object
+	 * @param	integer	$mode	<https://secure.php.net/manual/en/pdostatement.fetch.php>
+	 * @return	object
 	 */
 	public function fetch($mode = null) {
 		$this->execute();
@@ -176,10 +252,35 @@ class PDODb implements PDODbInterface {
 		
 		return $this->stmt->fetch();
 	}
+	
+	/**
+	 * Get meta-data for a single field
+	 * @param	string	$name
+	 */
+	public function fetchField($name = '') {
+		$this->execute();
+		
+		// Fetch the row
+		$row = $this->fetch();
+		
+		switch (gettype($row)) {
+			case 'array': // PDO::FETCH_BOTH/PDO::FETCH_ASSOC
+				$field = isset($row[$name]) ? $row[$name] : false;
+				break;
+			case 'object': // PDO::FETCH_OBJ
+				$field = isset($row->{$name}) ? $row->{$name} : false;
+				break;
+			default: // Default value
+				$field = false;
+				break;
+		}
+		
+		return $field;
+	}
 
 	/**
 	 * Get number of affected rows
-	 * @return integer
+	 * @return	integer
 	 */
 	public function rowCount() {
 		return $this->stmt->rowCount();
@@ -187,7 +288,7 @@ class PDODb implements PDODbInterface {
 
 	/**
 	 * Get last inserted id
-	 * @return integer
+	 * @return	integer
 	 */
 	public function lastInsertId() {
 		return $this->dbh->lastInsertId();
@@ -195,7 +296,7 @@ class PDODb implements PDODbInterface {
 
 	/**
 	 * Run batch queries
-	 * @return bool
+	 * @return	bool
 	 */
 	public function beginTransaction() {
 		return $this->dbh->beginTransaction();
@@ -203,7 +304,7 @@ class PDODb implements PDODbInterface {
 
 	/**
 	 * Stop batch queries
-	 * @return bool
+	 * @return	bool
 	 */
 	public function endTransaction() {
 		return $this->dbh->commit();
@@ -211,7 +312,7 @@ class PDODb implements PDODbInterface {
 
 	/**
 	 * Cancel batch queries
-	 * @return bool
+	 * @return	bool
 	 */
 	public function cancelTransaction() {
 		return $this->dbh->rollBack();
@@ -219,7 +320,7 @@ class PDODb implements PDODbInterface {
 	
 	/**
 	 * Dumps info contained in prepared statement
-	 * @return void
+	 * @return	void
 	 */
 	public function debugDumpParams() {
 		return $this->stmt->debugDumpParams();

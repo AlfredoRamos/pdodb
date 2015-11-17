@@ -20,6 +20,13 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+/**
+ * @ignore
+ */
+if (!defined('IN_PDODB')) {
+	exit;
+}
+
 interface PDODbInterface {
 	public function query($query = '');
 	public function bind($param = '', $value = '', $type = null);
@@ -27,6 +34,7 @@ interface PDODbInterface {
 	public function execute();
 	public function fetchAll($mode = null);
 	public function fetch($mode = null);
+	public function fetchField($name = '');
 	public function rowCount();
 	public function lastInsertId();
 	public function beginTransaction();
