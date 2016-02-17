@@ -38,7 +38,7 @@ class Config implements ConfigInterface {
 			return false;
 		}
 		
-		$this->config = $this->getConfig($file);
+		$this->config = $this->setupConfigFile($file);
 	}
 	
 	/**
@@ -46,7 +46,7 @@ class Config implements ConfigInterface {
 	 * @param	string	$config
 	 * @return	bool|array|null
 	 */
-	protected function getConfig($file = '') {
+	protected function setupConfigFile($file = '') {
 		// Exit if $file is empty
 		if (empty($file)) {
 			return false;
