@@ -2,17 +2,36 @@
 
 Simple PDO Class with prepared statements.
 
+### Installation via composer
+
+Open your ```composer.json``` file and add the following line in the ```require``` object:
+
+**Stable version**
+
+```json
+"alfredo-ramos/pdodb": "~1.5"
+```
+
+**Development version**
+
+```json
+"alfredo-ramos/pdodb": "~1.6@dev"
+```
+
+Then run ```composer install``` or ```composer update``` on your terminal.
+
 ### Configuration
 
-Copy the file ```PDODb/example.config.inc.php``` to ```PDODb/config.inc.php``` and edit the values of this last one as needed.
+Copy the file ```src/config/example.config.inc.php``` to ```src/config/config.inc.php``` and edit the values of this last one as needed.
 
 ### Usage
 
-**Setup**
-```php
-require_once 'PDODb/autoload.php';
+**Autoloading**
 
-$db = AlfredoRamos\PDODb::instance();
+```php
+require __DIR__ . '/vendor/autoload.php';
+
+$db = \AlfredoRamos\PDODb\PDODb::instance();
 ```
 
 **SELECT**
@@ -63,5 +82,3 @@ $db->bindArray([
 ]);
 $db->execute();
 ```
-
-For a working MySQL example see the ```example``` directory.

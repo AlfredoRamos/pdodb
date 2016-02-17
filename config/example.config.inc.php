@@ -37,14 +37,26 @@ return [
 	// Driver options:	https://php.net/manual/en/pdo.setattribute.php
 	'connections'	=> [
 		'mysql'	=> [
-			'driver'		=> 'mysql',
-			'host'			=> 'localhost',
-			'port'			=> 3306,
-			'database'		=> '',
-			'user'			=> '',
-			'password'		=> '',
-			'table_prefix'	=> '',
-			'options'		=> [
+			'driver'	=> 'mysql',
+			'host'		=> 'localhost',
+			'port'		=> 3306,
+			'database'	=> '',
+			'user'		=> '',
+			'password'	=> '',
+			'prefix'	=> '',
+			'options'	=> [
+				PDO::ATTR_EMULATE_PREPARES		=> false,
+				PDO::ATTR_ERRMODE				=> PDO::ERRMODE_EXCEPTION,
+				PDO::ATTR_DEFAULT_FETCH_MODE	=> PDO::FETCH_OBJ,
+				PDO::ATTR_PERSISTENT			=> true,
+				PDO::MYSQL_ATTR_INIT_COMMAND	=> 'SET NAMES utf8'
+			]
+		],
+		'sqlite'	=> [
+			'driver'	=> 'sqlite',
+			'database'	=> realpath('/path/to/database.sqlite'),
+			'prefix'	=> '',
+			'options'	=> [
 				PDO::ATTR_EMULATE_PREPARES		=> false,
 				PDO::ATTR_ERRMODE				=> PDO::ERRMODE_EXCEPTION,
 				PDO::ATTR_DEFAULT_FETCH_MODE	=> PDO::FETCH_OBJ,
