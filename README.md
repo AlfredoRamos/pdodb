@@ -1,6 +1,8 @@
 ### Simple PDO Class
 
-Simple PDO Class with prepared statements.
+A simple PDO wrapper.
+
+[![Build Status](https://img.shields.io/travis/AlfredoRamos/pdodb/master.svg?style=flat-square)](https://travis-ci.org/AlfredoRamos/pdodb) [![Latest Stable Version](https://img.shields.io/packagist/v/alfredo-ramos/pdodb.svg?style=flat-square&label=stable)](https://github.com/AlfredoRamos/pdodb/releases) [![Latest Unstable Version](https://img.shields.io/packagist/vpre/alfredo-ramos/pdodb.svg?style=flat-square&label=unstable)](https://packagist.org/packages/alfredo-ramos/pdodb) [![License](https://img.shields.io/packagist/l/alfredo-ramos/pdodb.svg?style=flat-square)](https://raw.githubusercontent.com/AlfredoRamos/pdodb/master/LICENSE)
 
 ### Installation via composer
 
