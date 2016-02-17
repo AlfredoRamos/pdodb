@@ -73,7 +73,7 @@ class Config implements ConfigInterface {
 		if (file_exists($defaults)) {
 			$defaults = require $defaults;
 		} else {
-			trigger_error('The file "' . $defaults . '" must exist to load default values.', E_USER_ERROR);
+			trigger_error('The file <code>' . $defaults . '</code> must exist to load default values.', E_USER_ERROR);
 		}
 		
 		if (file_exists($file)) {
@@ -82,6 +82,8 @@ class Config implements ConfigInterface {
 			
 			// Check if it's an array
 			$config = is_array($config) ? $config : [];
+		} else {
+			trigger_error('The file <code>' . $file . '</code> doesn\'t exist.', E_USER_ERROR);
 		}
 		
 		// Return the config array with the values
