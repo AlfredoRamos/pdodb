@@ -31,18 +31,17 @@ class Customer {
 		
 		if (!$this->table_exists()) {
 			$this->create_table();
-			
-			if (!$this->initial_data_exist()) {
-				$this->set_initial_data();
-			}
-			
+		}
+		
+		if (!$this->initial_data_exist()) {
+			$this->set_initial_data();
 		}
 		
 	}
 	
 	public function table_exists() {
 		
-		$sql = 'SHOW TABLES LIKE "' . $this->db->table_prefix . 'customers"';
+		$sql = 'SHOW TABLES LIKE "' . $this->db->prefix . 'customers"';
 		$this->db->query($sql);
 		$this->db->fetch();
 		$row = $this->db->rowCount();
@@ -53,7 +52,7 @@ class Customer {
 	
 	public function create_table() {
 		
-		$sql = 'CREATE TABLE IF NOT EXISTS ' . $this->db->table_prefix . 'customers (
+		$sql = 'CREATE TABLE IF NOT EXISTS ' . $this->db->prefix . 'customers (
 					customer_id int(11) NOT NULL AUTO_INCREMENT,
 					contact_name varchar(50) COLLATE utf8_unicode_ci NOT NULL,
 					postal_address text COLLATE utf8_unicode_ci NOT NULL,
@@ -74,7 +73,7 @@ class Customer {
 		
 		// Just for testing
 		$sql = 'SELECT COUNT(customer_id) AS total_rows
-				FROM ' . $this->db->table_prefix . 'customers';
+				FROM ' . $this->db->prefix . 'customers';
 		$this->db->query($sql);
 		$rows = $this->db->fetchField('total_rows');
 		
@@ -87,7 +86,7 @@ class Customer {
 		// Start transaction
 		$this->db->beginTransaction();
 		
-		$sql = 'INSERT INTO ' . $this->db->table_prefix . 'customers (
+		$sql = 'INSERT INTO ' . $this->db->prefix . 'customers (
 					contact_name,
 					postal_address,
 					city,
@@ -157,7 +156,7 @@ class Customer {
 	public function get_raw_data() {
 		
 		$sql = 'SELECT customer_id, contact_name, postal_address, city, country, postal_code, created_at, updated_at, deleted_at
-				FROM ' . $this->db->table_prefix . 'customers';
+				FROM ' . $this->db->prefix . 'customers';
 		$this->db->query($sql);
 		
 		return $this->db->fetchAll();
@@ -166,7 +165,7 @@ class Customer {
 	
 	public function get_customers() {
 		$sql = 'SELECT customer_id, contact_name, postal_address, city, country, postal_code
-				FROM ' . $this->db->table_prefix . 'customers WHERE deleted_at IS NULL';
+				FROM ' . $this->db->prefix . 'customers WHERE deleted_at IS NULL';
 		$this->db->query($sql);
 		
 		return $this->db->fetchAll();
@@ -174,14 +173,14 @@ class Customer {
 	
 	public function get_deleted_customers() {
 		$sql = 'SELECT customer_id, contact_name, postal_address, city, country, postal_code
-				FROM ' . $this->db->table_prefix . 'customers WHERE deleted_at IS NOT NULL';
+				FROM ' . $this->db->prefix . 'customers WHERE deleted_at IS NOT NULL';
 		$this->db->query($sql);
 		
 		return $this->db->fetchAll();
 	}
 	
 	public function delete_customer($customer_id) {
-		$sql = 'UPDATE ' . $this->db->table_prefix . 'customers
+		$sql = 'UPDATE ' . $this->db->prefix . 'customers
 				SET deleted_at = CURRENT_TIMESTAMP WHERE customer_id = :customer_id';
 		$this->db->query($sql);
 		$this->db->bind(':customer_id', $customer_id);
@@ -191,7 +190,7 @@ class Customer {
 	}
 	
 	public function restore_customer($customer_id) {
-		$sql = 'UPDATE ' . $this->db->table_prefix . 'customers
+		$sql = 'UPDATE ' . $this->db->prefix . 'customers
 				SET deleted_at = NULL WHERE customer_id = :customer_id';
 		$this->db->query($sql);
 		$this->db->bind(':customer_id', $customer_id);

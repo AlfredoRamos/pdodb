@@ -23,131 +23,76 @@
 /**
  * @ignore
  */
-define('IN_PDODB', true);
+if (!defined('IN_PDODB')) {
+	define('IN_PDODB', true);
+}
 
 use \PDO;
 use \PDOException;
-use \Exception;
 
 /**
  * @example example/Customer.php
  */
 class PDODb implements PDODbInterface {
+	
 	use SingletonTrait;
 	
 	private $dbh;
 	private $stmt;
-	private $config;
 	
-	public $table_prefix;
+	protected $config;
 	
+	public $prefix;
+	
+	/**
+	 * Constructor
+	 * @see AlfredoRamos\SingletonTrait::__construct()
+	 */
 	protected function init() {
-		// Set the configuration file
-		$this->setConfigFile(__DIR__ . '/config.inc.php');
+		// Config helper
+		$this->config = Config::instance();
 		
-		// Set PDODb::$table_prefix
-		$this->table_prefix = $this->config['table_prefix'];
+		// Connection name
+		$connection =  sprintf('connections.%s', $this->config->get('connection'));
 		
-		$dsn = vsprintf('%1$s:host=%2$s;port=%3$u;dbname=%4$s', [
-			$this->config['driver'],
-			$this->config['host'],
-			$this->config['port'],
-			$this->config['database']
-		]);
+		// Default PDO options
+		$data = [
+			'dsn'		=> vsprintf('%1$s:host=%2$s;port=%3$u;dbname=%4$s', [
+				$this->config->get($connection . '.driver'),
+				$this->config->get($connection . '.host'),
+				$this->config->get($connection . '.port'),
+				$this->config->get($connection . '.database')
+			]),
+			'user'		=> $this->config->get($connection . '.user'),
+			'password'	=> $this->config->get($connection . '.password'),
+			'options'	=> $this->config->get($connection . '.options')
+		];
+		
+		// Table prefix
+		$this->prefix = $this->config->get($connection . '.prefix');
+		
+		switch($this->config->get($connection . '.driver')) {
+			case 'sqlite':
+				$data = array_merge($data, [
+					'dsn'	=> vsprintf('%1$s:%2$s', [
+						$this->config->get($connection . '.driver'),
+						$this->config->get($connection . '.database')
+					])
+				]);
+		}
 		
 		try {
-			/**
-			 * Create a new PDO instanace
-			 * @param	string	$dsn
-			 * @param	string	PDODb::$config['user']
-			 * @param	string	PDODb::$config['password']
-			 * @param	array	PDODb::$config['options']
-			 */
+			// Create a new PDO instanace
 			$this->dbh = new PDO(
-				$dsn,
-				$this->config['user'],
-				$this->config['password'],
-				$this->config['options']
+				$data['dsn'],
+				$data['user'],
+				$data['password'],
+				$data['options']
 			);
 		} catch (PDOException $ex) {
 			trigger_error($ex->getMessage(), E_USER_ERROR);
 		}
 		
-	}
-	
-	/**
-	 * Set the configuration file
-	 * @param	string	$file
-	 */
-	public function setConfigFile($file = '') {
-		$this->config = $this->getConfig($file);
-	}
-	
-	/**
-	 * Read the configuration file
-	 * @param	string	$config
-	 * @return	array|null
-	 */
-	protected function getConfig($file = '') {
-		// Default options
-		$defaults = __DIR__ . '/config.inc.php.example';
-		
-		if (file_exists($defaults)) {
-			$defaults = require $defaults;
-			$defaults = is_array($defaults) ? $defaults : [];
-		} else {
-			// The're replaced latter, so do not change them
-			$defaults = [
-				// PDO driver
-				// <https://php.net/manual/en/pdo.getavailabledrivers.php>
-				'driver'		=> 'mysql',
-				
-				//Database host.
-				// Default: localhost
-				'host'			=> 'localhost',
-		
-				// Port to connect to your database server
-				// Default: 3306 (MySQL/MariaDB)
-				'port'			=> 3306,
-				
-				// Database name
-				'database'		=> '',
-		
-				// Database user
-				'user'			=> '',
-		
-				// Database user's password
-				'password'		=> '',
-		
-				// Table prefix
-				'table_prefix'	=> '',
-		
-				// PDO driver options
-				// <https://php.net/manual/en/pdo.setattribute.php>
-				'options'		=> [
-					PDO::ATTR_EMULATE_PREPARES		=> false,
-					PDO::ATTR_ERRMODE				=> PDO::ERRMODE_EXCEPTION,
-					PDO::ATTR_DEFAULT_FETCH_MODE	=> PDO::FETCH_OBJ,
-					PDO::ATTR_PERSISTENT			=> true,
-					PDO::MYSQL_ATTR_INIT_COMMAND	=> 'SET NAMES utf8'
-				]
-			];
-		}
-		
-		// Configuration array
-		$config = [];
-		
-		if (!empty($file) && file_exists($file)) {
-			// Load the array from file
-			$config = require $file;
-			
-			// Check if it's an array
-			$config = is_array($config) ? $config : [];
-		}
-		
-		// Return the config array with the values
-		// replaced with the ones from the file
-		return array_replace_recursive($defaults, $config);
 	}
 
 	/**
@@ -199,7 +144,7 @@ class PDODb implements PDODbInterface {
 	
 	/**
 	 * Bind the data from an array
-	 * @see		PDODb::bind()
+	 * @see		AlfredoRamos\PDODb::bind()
 	 * @param	array	$param
 	 * @return	bool
 	 */
@@ -256,6 +201,7 @@ class PDODb implements PDODbInterface {
 	/**
 	 * Get meta-data for a single field
 	 * @param	string	$name
+	 * @return	array|object|null
 	 */
 	public function fetchField($name = '') {
 		$this->execute();
@@ -265,13 +211,13 @@ class PDODb implements PDODbInterface {
 		
 		switch (gettype($row)) {
 			case 'array': // PDO::FETCH_BOTH/PDO::FETCH_ASSOC
-				$field = isset($row[$name]) ? $row[$name] : false;
+				$field = isset($row[$name]) ? $row[$name] : null;
 				break;
 			case 'object': // PDO::FETCH_OBJ
-				$field = isset($row->{$name}) ? $row->{$name} : false;
+				$field = isset($row->{$name}) ? $row->{$name} : null;
 				break;
 			default: // Default value
-				$field = false;
+				$field = null;
 				break;
 		}
 		

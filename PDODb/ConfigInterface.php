@@ -1,6 +1,6 @@
 <?php namespace AlfredoRamos;
 /**
- * Simple PDO Class - Singleton Trait
+ * Simple PDO Class - PDODb Interface
  * @author Alfredo Ramos <alfredo.ramos@yandex.com>
  * @link https://github.com/AlfredoRamos/simple-pdo-class
  * @copyright Copyright (c) 2013 Alfredo Ramos
@@ -27,25 +27,8 @@ if (!defined('IN_PDODB')) {
 	exit;
 }
 
-trait SingletonTrait {
-	
-	private static $instance = null;
-	
-	final private function __construct() {
-		static::init();
-	}
-	
-	final private function __clone() {}
-	final private function __wakeup() {}
-	
-	final public static function instance() {
-		if (static::$instance === null) {
-			static::$instance = new static;
-		}
-		
-		return static::$instance;
-	}
-	
-	protected function init() {}
-	
+interface ConfigInterface {
+	public function get($path = '', $default = null);
+	public function set($path = '', $value = '');
+	public function has($path = '');
 }
