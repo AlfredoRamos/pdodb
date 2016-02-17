@@ -1,4 +1,4 @@
-<?php namespace AlfredoRamos;
+<?php namespace AlfredoRamos\PDODb;
 /**
  * Simple PDO Class
  * @author Alfredo Ramos <alfredo.ramos@yandex.com>
@@ -23,19 +23,19 @@
 /**
  * @ignore
  */
-if (!defined('IN_PDODB')) {
-	define('IN_PDODB', true);
-}
+define('IN_PDODB', true);
 
 use \PDO;
 use \PDOException;
+use \AlfredoRamos\PDODb\Config;
+use \AlfredoRamos\PDODb\Interfaces\PDODbInterface;
 
 /**
  * @example example/Customer.php
  */
 class PDODb implements PDODbInterface {
 	
-	use SingletonTrait;
+	use \AlfredoRamos\PDODb\Traits\SingletonTrait;
 	
 	private $dbh;
 	private $stmt;

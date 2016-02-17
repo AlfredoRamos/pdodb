@@ -1,0 +1,36 @@
+{
+	"name": "alfredo-ramos/pdodb",
+	"description": "A simple PDO wrapper",
+	"keywords": ["pdo", "wrapper"],
+	"homepage": "https://github.com/AlfredoRamos/pdodb",
+	"license": "GPL-3.0+",
+	"authors": [
+		{
+			"name": "Alfredo Ramos",
+			"email": "alfredo.ramos@yandex.com",
+			"homepage": "https://github.com/AlfredoRamos",
+			"role": "Developer"
+		}
+	],
+	"require": {
+		"php": ">=5.5.9"
+	},
+	"require-dev": {
+		"phpunit/phpunit": "~4.8"
+	},
+	"autoload": {
+		"psr-4": {
+			"AlfredoRamos\\PDODb\\": "src/"
+		}
+	},
+	"autoload-dev": {
+		"psr-4": {
+			"AlfredoRamos\\Tests\\": "tests/"
+		}
+	},
+	"extra": {
+		"branch-alias": {
+			"dev-master": "0.1.x-dev"
+		}
+	}
+}

@@ -1,4 +1,4 @@
-<?php namespace AlfredoRamos;
+<?php namespace AlfredoRamos\PDODb\Interfaces;
 /**
  * Simple PDO Class - PDODb Interface
  * @author Alfredo Ramos <alfredo.ramos@yandex.com>
@@ -27,8 +27,18 @@ if (!defined('IN_PDODB')) {
 	exit;
 }
 
-interface ConfigInterface {
-	public function get($path = '', $default = null);
-	public function set($path = '', $value = '');
-	public function has($path = '');
+interface PDODbInterface {
+	public function query($query = '');
+	public function bind($param = '', $value = '', $type = null);
+	public function bindArray($param = []);
+	public function execute();
+	public function fetchAll($mode = null);
+	public function fetch($mode = null);
+	public function fetchField($name = '');
+	public function rowCount();
+	public function lastInsertId();
+	public function beginTransaction();
+	public function endTransaction();
+	public function cancelTransaction();
+	public function debugDumpParams();
 }

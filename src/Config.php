@@ -1,4 +1,4 @@
-<?php namespace AlfredoRamos;
+<?php namespace AlfredoRamos\PDODb;
 /**
  * Simple PDO Class
  * @author Alfredo Ramos <alfredo.ramos@yandex.com>
@@ -24,20 +24,19 @@
  * @ignore
  */
 if (!defined('IN_PDODB')) {
-	define('IN_PDODB', true);
+	exit;
 }
 
-use \PDO;
-use \PDOException;
+use \AlfredoRamos\PDODb\Interfaces\ConfigInterface;
 
 class Config implements ConfigInterface {
 	
-	use SingletonTrait;
+	use \AlfredoRamos\PDODb\Traits\SingletonTrait;
 	
 	private $config;
 	
 	protected function init() {
-		$this->setConfigFile(__DIR__ . '/config.inc.php');
+		$this->setConfigFile(__DIR__ . '/../config/config.inc.php');
 	}
 	
 	/**
@@ -66,7 +65,7 @@ class Config implements ConfigInterface {
 		}
 		
 		// Default options
-		$defaults = __DIR__ . '/example.config.inc.php';
+		$defaults = __DIR__ . '/../config/example.config.inc.php';
 		
 		// Configuration array
 		$config = [];

@@ -1,6 +1,6 @@
-<?php
+<?php namespace AlfredoRamos\PDODb\Interfaces;
 /**
- * Simple PDO Class - Autoloader
+ * Simple PDO Class - PDODb Interface
  * @author Alfredo Ramos <alfredo.ramos@yandex.com>
  * @link https://github.com/AlfredoRamos/simple-pdo-class
  * @copyright Copyright (c) 2013 Alfredo Ramos
@@ -20,12 +20,15 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-spl_autoload_register(function ($class) {
-	$prefix = 'AlfredoRamos\\';
-	$relative_class = substr($class, strlen($prefix));
-	$file = __DIR__ . '/' . str_replace('\\', '/', $relative_class) . '.php';
-	
-	if (file_exists($file)) {
-		require_once $file;
-	}
-});
+/**
+ * @ignore
+ */
+if (!defined('IN_PDODB')) {
+	exit;
+}
+
+interface ConfigInterface {
+	public function get($path = '', $default = null);
+	public function set($path = '', $value = '');
+	public function has($path = '');
+}

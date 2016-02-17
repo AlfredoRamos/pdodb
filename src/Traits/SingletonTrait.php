@@ -1,6 +1,6 @@
-<?php namespace AlfredoRamos;
+<?php namespace AlfredoRamos\PDODb\Traits;
 /**
- * Simple PDO Class - PDODb Interface
+ * Simple PDO Class - Singleton Trait
  * @author Alfredo Ramos <alfredo.ramos@yandex.com>
  * @link https://github.com/AlfredoRamos/simple-pdo-class
  * @copyright Copyright (c) 2013 Alfredo Ramos
@@ -27,18 +27,25 @@ if (!defined('IN_PDODB')) {
 	exit;
 }
 
-interface PDODbInterface {
-	public function query($query = '');
-	public function bind($param = '', $value = '', $type = null);
-	public function bindArray($param = []);
-	public function execute();
-	public function fetchAll($mode = null);
-	public function fetch($mode = null);
-	public function fetchField($name = '');
-	public function rowCount();
-	public function lastInsertId();
-	public function beginTransaction();
-	public function endTransaction();
-	public function cancelTransaction();
-	public function debugDumpParams();
+trait SingletonTrait {
+	
+	private static $instance = null;
+	
+	final private function __construct() {
+		static::init();
+	}
+	
+	final private function __clone() {}
+	final private function __wakeup() {}
+	
+	final public static function instance() {
+		if (static::$instance === null) {
+			static::$instance = new static;
+		}
+		
+		return static::$instance;
+	}
+	
+	protected function init() {}
+	
 }
