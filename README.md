@@ -2,7 +2,7 @@
 
 A simple PDO wrapper.
 
-[![Build Status](https://img.shields.io/travis/AlfredoRamos/pdodb/master.svg?style=flat-square&maxAge=2592000)](https://travis-ci.org/AlfredoRamos/pdodb) [![Latest Stable Version](https://img.shields.io/github/tag/AlfredoRamos/pdodb.svg?style=flat-square&label=stable&maxAge=2592000)](https://github.com/AlfredoRamos/pdodb/releases) [![License](https://img.shields.io/packagist/l/alfredo-ramos/pdodb.svg?style=flat-square)](https://raw.githubusercontent.com/AlfredoRamos/pdodb/master/LICENSE)
+[![Build Status](https://img.shields.io/travis/AlfredoRamos/pdodb/master.svg?style=flat-square&maxAge=2592000)](https://travis-ci.org/AlfredoRamos/pdodb) [![Latest Stable Version](https://img.shields.io/github/tag/AlfredoRamos/pdodb.svg?style=flat-square&label=stable&maxAge=2592000)](https://github.com/AlfredoRamos/pdodb/releases) [![License](https://img.shields.io/github/license/AlfredoRamos/pdodb.svg?style=flat-square)](https://raw.githubusercontent.com/AlfredoRamos/pdodb/master/LICENSE)
 
 ### Installation via composer
 
