@@ -13,7 +13,7 @@ use \AlfredoRamos\PDODb\PDODb;
 class BasicTest extends \PHPUnit_Framework_TestCase {
 	public function testInstance() {
 		$db = PDODb::instance();
-		
+
 		$this->assertInstanceOf(\AlfredoRamos\PDODb\PDODb::class, $db);
 	}
 }

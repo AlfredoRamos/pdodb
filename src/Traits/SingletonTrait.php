@@ -16,24 +16,23 @@ if (!defined('IN_PDODB')) {
 }
 
 trait SingletonTrait {
-	
+
 	private static $instance = null;
-	
+
 	final private function __construct() {
 		static::init();
 	}
-	
+
 	final private function __clone() {}
 	final private function __wakeup() {}
-	
+
 	final public static function instance() {
 		if (static::$instance === null) {
 			static::$instance = new static;
 		}
-		
 		return static::$instance;
 	}
-	
+
 	protected function init() {}
-	
+
 }

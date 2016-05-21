@@ -12,25 +12,26 @@ use \AlfredoRamos\PDODb\Config;
 
 class ConfigTest extends \PHPUnit_Framework_TestCase {
 	protected $config;
-	
+
 	protected function setUp() {
 		parent::setUp();
-		
+
 		$this->config = Config::instance();
+		$this->config->setConfigFile(__DIR__ . '/../config/example.config.inc.php');
 	}
-	
+
 	public function testInstance() {
 		$this->assertInstanceOf(\AlfredoRamos\PDODb\Config::class, $this->config);
 	}
-	
+
 	public function testConfigValue() {
-		$this->assertSame('mysql', $this->config->get('connections.mysql.driver'));
+		$this->assertSame('mysql', $this->config->get('connections.mysql1.driver'));
 	}
-	
+
 	public function testInvalidConfigValue() {
 		$this->assertNull($this->config->get('xyz.123'));
 	}
-	
+
 	public function testInvalidConfigWithDefaultValue() {
 		$this->assertSame(0.1, $this->config->get('xyz.123', 0.1));
 	}

@@ -18,17 +18,18 @@ if (!defined('IN_PDODB')) {
 return [
 	// Default connection
 	// Must exist in the connections array
-	'connection'	=> 'mysql',
-	
+	'connection'	=> 'mysql1',
+
 	// Connection settings
 	// Drivers:			https://php.net/manual/en/pdo.getavailabledrivers.php
 	// Driver options:	https://php.net/manual/en/pdo.setattribute.php
 	'connections'	=> [
-		'mysql'	=> [
+		'mysql1'	=> [
 			'driver'	=> 'mysql',
 			'host'		=> 'localhost',
 			'port'		=> 3306,
 			'database'	=> '',
+			'charset'	=> 'utf8',
 			'user'		=> '',
 			'password'	=> '',
 			'prefix'	=> '',
@@ -37,19 +38,6 @@ return [
 				PDO::ATTR_ERRMODE				=> PDO::ERRMODE_EXCEPTION,
 				PDO::ATTR_DEFAULT_FETCH_MODE	=> PDO::FETCH_OBJ,
 				PDO::ATTR_PERSISTENT			=> true,
-				PDO::MYSQL_ATTR_INIT_COMMAND	=> 'SET NAMES utf8'
-			]
-		],
-		'sqlite'	=> [
-			'driver'	=> 'sqlite',
-			'database'	=> realpath('/path/to/database.sqlite'),
-			'prefix'	=> '',
-			'options'	=> [
-				PDO::ATTR_EMULATE_PREPARES		=> false,
-				PDO::ATTR_ERRMODE				=> PDO::ERRMODE_EXCEPTION,
-				PDO::ATTR_DEFAULT_FETCH_MODE	=> PDO::FETCH_OBJ,
-				PDO::ATTR_PERSISTENT			=> true,
-				PDO::MYSQL_ATTR_INIT_COMMAND	=> 'SET NAMES utf8'
 			]
 		]
 	]

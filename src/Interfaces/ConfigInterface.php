@@ -16,6 +16,7 @@ if (!defined('IN_PDODB')) {
 }
 
 interface ConfigInterface {
+	public function setConfigFile($file = '');
 	public function get($path = '', $default = null);
 	public function set($path = '', $value = '');
 	public function has($path = '');
