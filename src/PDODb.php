@@ -1,4 +1,4 @@
-<?php namespace AlfredoRamos\PDODb;
+<?php
 
 /**
  * PDODb - A simple PDO wrapper
@@ -8,65 +8,66 @@
  * @license GNU GPL 3.0+ <https://www.gnu.org/licenses/gpl-3.0.txt>
  */
 
-/**
- * @ignore
- */
-define('IN_PDODB', true);
+namespace AlfredoRamos\PDODb;
 
-use \PDO;
-use \PDOException;
-use \AlfredoRamos\PDODb\Config;
-use \AlfredoRamos\PDODb\Interfaces\PDODbInterface;
+use PDO;
+use PDOException;
+use AlfredoRamos\PDODb\Interfaces\PDODbInterface;
 
-/**
- * @example example/Customer.php
- */
 class PDODb implements PDODbInterface {
-
-	use \AlfredoRamos\PDODb\Traits\SingletonTrait;
 
 	private $dbh;
 	private $stmt;
-	private $config;
-
 	public $prefix;
 
 	/**
 	 * Constructor
-	 * @see AlfredoRamos\SingletonTrait::__construct()
+	 * @param	array	$config
+	 * @return	void
 	 */
-	protected function init() {
-		// Config helper
-		$this->config = Config::instance();
-		$this->config->setConfigFile(__DIR__ . '/../config/config.inc.php');
-
-		// Connection name
-		$connection =  sprintf('connections.%s', $this->config->get('connection'));
+	public function __construct($config = []) {
+		// Default options
+		$config = array_replace(
+			[
+				'driver'	=> 'mysql',
+				'host'		=> 'localhost',
+				'port'		=> 3306,
+				'database'	=> '',
+				'charset'	=> 'utf8',
+				'user'		=> '',
+				'password'	=> '',
+				'prefix'	=> '',
+				'options'	=> [
+					PDO::ATTR_EMULATE_PREPARES		=> false,
+					PDO::ATTR_ERRMODE				=> PDO::ERRMODE_EXCEPTION,
+					PDO::ATTR_DEFAULT_FETCH_MODE	=> PDO::FETCH_OBJ,
+					PDO::ATTR_PERSISTENT			=> true
+				]
+			],
+			$config
+		);
 
 		// Default PDO options
-		$data = [
-			'dsn'	=> vsprintf('%1$s:host=%2$s;port=%3$u;dbname=%4$s;charset=%5$s', [
-				$this->config->get(sprintf('%s.driver', $connection)),
-				$this->config->get(sprintf('%s.host', $connection)),
-				$this->config->get(sprintf('%s.port', $connection)),
-				$this->config->get(sprintf('%s.database', $connection)),
-				$this->config->get(sprintf('%s.charset', $connection))
-			]),
-			'user'		=> $this->config->get(sprintf('%s.user', $connection)),
-			'password'	=> $this->config->get(sprintf('%s.password', $connection)),
-			'options'	=> $this->config->get(sprintf('%s.options', $connection)),
-		];
+		$config['dsn']	= vsprintf(
+			'%1$s:host=%2$s;port=%3$u;dbname=%4$s;charset=%5$s', [
+				$config['driver'],
+				$config['host'],
+				$config['port'],
+				$config['database'],
+				$config['charset']
+			]
+		);
 
 		// Table prefix
-		$this->prefix = $this->config->get(sprintf('%s.prefix', $connection));
+		$this->prefix = $config['prefix'];
 
 		try {
 			// Create a new PDO instanace
 			$this->dbh = new PDO(
-				$data['dsn'],
-				$data['user'],
-				$data['password'],
-				$data['options']
+				$config['dsn'],
+				$config['user'],
+				$config['password'],
+				$config['options']
 			);
 		} catch (PDOException $ex) {
 			trigger_error($ex->getMessage(), E_USER_ERROR);
@@ -128,7 +129,11 @@ class PDODb implements PDODbInterface {
 	 * @return	bool
 	 */
 	public function bindArray($param = []) {
-		array_map([$this, 'bind'], array_keys($param), array_values($param));
+		array_map(
+			[$this, 'bind'],
+			array_keys($param),
+			array_values($param)
+		);
 	}
 
 	/**

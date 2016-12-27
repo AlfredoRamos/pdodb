@@ -1,4 +1,4 @@
-<?php namespace AlfredoRamos\PDODb\Interfaces;
+<?php
 
 /**
  * PDODb - A simple PDO wrapper
@@ -8,12 +8,7 @@
  * @license GNU GPL 3.0+ <https://www.gnu.org/licenses/gpl-3.0.txt>
  */
 
-/**
- * @ignore
- */
-if (!defined('IN_PDODB')) {
-	exit;
-}
+namespace AlfredoRamos\PDODb\Interfaces;
 
 interface PDODbInterface {
 	public function query($query = '');

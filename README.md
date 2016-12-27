@@ -2,7 +2,7 @@
 
 A simple PDO wrapper.
 
-[![Build Status](https://img.shields.io/travis/AlfredoRamos/pdodb/master.svg?style=flat-square&maxAge=2592000)](https://travis-ci.org/AlfredoRamos/pdodb) [![Latest Stable Version](https://img.shields.io/github/tag/AlfredoRamos/pdodb.svg?style=flat-square&label=stable&maxAge=2592000)](https://github.com/AlfredoRamos/pdodb/releases) [![License](https://img.shields.io/github/license/AlfredoRamos/pdodb.svg?style=flat-square)](https://raw.githubusercontent.com/AlfredoRamos/pdodb/master/LICENSE)
+[![Build Status](https://img.shields.io/travis/AlfredoRamos/pdodb.svg?style=flat-square&maxAge=3600)](https://travis-ci.org/AlfredoRamos/pdodb) [![Latest Stable Version](https://img.shields.io/github/tag/AlfredoRamos/pdodb.svg?style=flat-square&label=stable&maxAge=3600)](https://github.com/AlfredoRamos/pdodb/releases) [![License](https://img.shields.io/github/license/AlfredoRamos/pdodb.svg?style=flat-square)](https://raw.githubusercontent.com/AlfredoRamos/pdodb/master/LICENSE)
 
 ### Installation via composer
 
@@ -24,20 +24,20 @@ Add the following line in the `require` object:
 **Stable version**
 
 ```json
-"alfredo-ramos/pdodb": "~1.5"
+"alfredo-ramos/pdodb": "~2.0"
 ```
 
 **Development version**
 
 ```json
-"alfredo-ramos/pdodb": "~1.6@dev"
+"alfredo-ramos/pdodb": "master"
 ```
 
 Then run `composer install` or `composer update` on your terminal.
 
 ### Configuration
 
-Copy the file `src/config/example.config.inc.php` to `src/config/config.inc.php` and edit the values of this last one as needed.
+The constructor takes an array with all the values needed to connect to the database, see `AlfredoRamos\PDODb\PDODb::__construct()` (`src/PDODb.php`) for more info.
 
 ### Usage
 
@@ -46,7 +46,11 @@ Copy the file `src/config/example.config.inc.php` to `src/config/config.inc.php`
 ```php
 require __DIR__ . '/vendor/autoload.php';
 
-$db = \AlfredoRamos\PDODb\PDODb::instance();
+$db = new \AlfredoRamos\PDODb\PDODb([
+	'user'		=> 'test_user',
+	'password'	=> 'test_password',
+	'database'	=> 'test_database'
+]);
 ```
 
 **SELECT**
