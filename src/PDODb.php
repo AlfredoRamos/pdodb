@@ -77,12 +77,12 @@ class PDODb implements PDODbInterface {
 
 	/**
 	 * Make a query
-	 * @param	string	$query
+	 * @param	string	$sql
 	 * @return	PDOStatement|PDOException
 	 */
-	public function query($query = '') {
+	public function query($sql = '') {
 		try {
-			$this->stmt = $this->dbh->prepare($query);
+			$this->stmt = $this->dbh->prepare($sql);
 		} catch (PDOException $ex) {
 			trigger_error($ex->getMessage(), E_USER_ERROR);
 		}

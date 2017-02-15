@@ -11,7 +11,7 @@
 namespace AlfredoRamos\PDODb\Interfaces;
 
 interface PDODbInterface {
-	public function query($query = '');
+	public function query($sql = '');
 	public function bind($param = '', $value = '', $type = null);
 	public function bindArray($param = []);
 	public function execute();

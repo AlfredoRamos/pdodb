@@ -30,7 +30,7 @@ Add the following line in the `require` object:
 **Development version**
 
 ```json
-"alfredo-ramos/pdodb": "master"
+"alfredo-ramos/pdodb": "dev-master"
 ```
 
 Then run `composer install` or `composer update` on your terminal.
