@@ -23,7 +23,7 @@ class BasicTest extends TestCase {
 		$this->db = new PDODb([
 			'user'		=> $GLOBALS['DB_USER'],
 			'database'	=> $GLOBALS['DB_DBNAME'],
-			'prefix'	=> 't_'
+			'prefix'	=> $GLOBALS['DB_TPREFIX']
 		]);
 	}
 
