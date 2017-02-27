@@ -12,9 +12,8 @@ namespace AlfredoRamos\PDODb;
 
 use PDO;
 use PDOException;
-use AlfredoRamos\PDODb\Interfaces\PDODbInterface;
 
-class PDODb implements PDODbInterface {
+class PDODb implements Interfaces\PDODbInterface {
 
 	private $dbh;
 	private $stmt;
