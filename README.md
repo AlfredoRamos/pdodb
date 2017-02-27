@@ -1,10 +1,10 @@
-### Simple PDO Class
+### About
 
 A simple PDO wrapper.
 
 [![Build Status](https://img.shields.io/travis/AlfredoRamos/pdodb.svg?style=flat-square&maxAge=3600)](https://travis-ci.org/AlfredoRamos/pdodb) [![Latest Stable Version](https://img.shields.io/github/tag/AlfredoRamos/pdodb.svg?style=flat-square&label=stable&maxAge=3600)](https://github.com/AlfredoRamos/pdodb/releases) [![License](https://img.shields.io/github/license/AlfredoRamos/pdodb.svg?style=flat-square)](https://raw.githubusercontent.com/AlfredoRamos/pdodb/master/LICENSE)
 
-### Installation via composer
+### Installation
 
 Open your `composer.json` file and add this repository in your `repositories` array ([repositories#vcs](https://getcomposer.org/doc/05-repositories.md#vcs)):
 
