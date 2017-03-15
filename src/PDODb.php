@@ -21,7 +21,9 @@ class PDODb implements Interfaces\PDODbInterface {
 
 	/**
 	 * Constructor
+	 *
 	 * @param	array	$config
+	 *
 	 * @return	void
 	 */
 	public function __construct($config = []) {
@@ -76,7 +78,9 @@ class PDODb implements Interfaces\PDODbInterface {
 
 	/**
 	 * Make a query
+	 *
 	 * @param	string	$sql
+	 *
 	 * @return	PDOStatement|PDOException
 	 */
 	public function query($sql = '') {
@@ -91,9 +95,11 @@ class PDODb implements Interfaces\PDODbInterface {
 
 	/**
 	 * Bind the data
+	 *
 	 * @param	string	$param
 	 * @param	string	$value
 	 * @param	integer|bool|null|string	$type
+	 *
 	 * @return	bool
 	 */
 	public function bind($param = '', $value = '', $type = null) {
@@ -123,8 +129,11 @@ class PDODb implements Interfaces\PDODbInterface {
 
 	/**
 	 * Bind the data from an array
+	 *
 	 * @see		AlfredoRamos\PDODb::bind()
+	 *
 	 * @param	array	$param
+	 *
 	 * @return	bool
 	 */
 	public function bindArray($param = []) {
@@ -137,6 +146,7 @@ class PDODb implements Interfaces\PDODbInterface {
 
 	/**
 	 * Executhe the query
+	 *
 	 * @return	bool
 	 */
 	public function execute() {
@@ -144,29 +154,10 @@ class PDODb implements Interfaces\PDODbInterface {
 	}
 
 	/**
-	 * Get multiple records
-	 * https://secure.php.net/manual/en/pdostatement.fetch.php
-	 * @param	integer	$mode
-	 * @return	array
-	 */
-	public function fetchAll($mode = null) {
-		$this->execute();
-
-		try {
-			if (is_int($mode)) {
-				$this->stmt->setFetchMode($mode);
-			}
-		} catch (PDOException $ex) {
-			trigger_error($ex->getMessage(), E_USER_ERROR);
-		}
-
-		return $this->stmt->fetchAll();
-	}
-
-	/**
 	 * Get single record
-	 * https://secure.php.net/manual/en/pdostatement.fetch.php
+	 *
 	 * @param	integer	$mode
+	 *
 	 * @return	object
 	 */
 	public function fetch($mode = null) {
@@ -184,26 +175,59 @@ class PDODb implements Interfaces\PDODbInterface {
 	}
 
 	/**
-	 * Get single field
+	 * Get multiple records
+	 *
+	 * @param	integer	$mode
+	 *
+	 * @return	array
+	 */
+	public function fetchAll($mode = null) {
+		$this->execute();
+
+		try {
+			if (is_int($mode)) {
+				$this->stmt->setFetchMode($mode);
+			}
+		} catch (PDOException $ex) {
+			trigger_error($ex->getMessage(), E_USER_ERROR);
+		}
+
+		return $this->stmt->fetchAll();
+	}
+
+	/**
+	 * Get single field (column) by index
+	 *
+	 * @param	integer	$column
+	 *
+	 * @return	string|integer|float|null
+	 */
+	public function fetchColumn($column = 0) {
+		$this->execute();
+
+		return $this->stmt->fetchColumn($column);
+	}
+
+	/**
+	 * Get single field (column) by name
+	 *
 	 * @param	string	$name
-	 * @return	array|object|null
+	 *
+	 * @return	string|integer|float|null
 	 */
 	public function fetchField($name = '') {
 		$this->execute();
 
 		// Fetch the row
 		$row = $this->fetch();
+		$field = null;
 
-		switch (gettype($row)) {
-		case 'array': // PDO::FETCH_BOTH/PDO::FETCH_ASSOC
-			$field = isset($row[$name]) ? $row[$name] : null;
-			break;
-		case 'object': // PDO::FETCH_OBJ
-			$field = isset($row->{$name}) ? $row->{$name} : null;
-			break;
-		default: // Default value
-			$field = null;
-			break;
+		if (is_array($row)) {
+			// PDO::FETCH_BOTH/PDO::FETCH_ASSOC
+			$field = isset($row[$name]) ? $row[$name] : $field;
+		} elseif (is_object($row)) {
+			// PDO::FETCH_OBJ
+			$field = isset($row->{$name}) ? $row->{$name} : $field;
 		}
 
 		return $field;
@@ -211,6 +235,7 @@ class PDODb implements Interfaces\PDODbInterface {
 
 	/**
 	 * Get number of affected rows
+	 *
 	 * @return	integer
 	 */
 	public function rowCount() {
@@ -218,7 +243,17 @@ class PDODb implements Interfaces\PDODbInterface {
 	}
 
 	/**
+	 * Get number of columns in the result set
+	 *
+	 * @return integer
+	 */
+	public function columnCount() {
+		return $this->stmt->columnCount();
+	}
+
+	/**
 	 * Get last inserted id
+	 *
 	 * @return	integer
 	 */
 	public function lastInsertId() {
@@ -226,7 +261,8 @@ class PDODb implements Interfaces\PDODbInterface {
 	}
 
 	/**
-	 * Run batch queries
+	 * Run transaction
+	 *
 	 * @return	bool
 	 */
 	public function beginTransaction() {
@@ -234,7 +270,8 @@ class PDODb implements Interfaces\PDODbInterface {
 	}
 
 	/**
-	 * Stop batch queries
+	 * Stop transaction
+	 *
 	 * @return	bool
 	 */
 	public function endTransaction() {
@@ -242,7 +279,8 @@ class PDODb implements Interfaces\PDODbInterface {
 	}
 
 	/**
-	 * Cancel batch queries
+	 * Cancel transaction
+	 *
 	 * @return	bool
 	 */
 	public function cancelTransaction() {
@@ -251,6 +289,7 @@ class PDODb implements Interfaces\PDODbInterface {
 
 	/**
 	 * Dumps info contained in prepared statement
+	 *
 	 * @return	void
 	 */
 	public function debugDumpParams() {
