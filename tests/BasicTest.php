@@ -55,6 +55,30 @@ class BasicTest extends TestCase {
 			':city'			=> 'Switzerland'
 		]);
 		$this->db->execute();
-		$this->assertGreaterThan(5, $this->db->lastInsertId());
+		$this->assertEquals(6, $this->db->lastInsertId());
+	}
+
+	public function testFetchColumn() {
+		$sql = 'SELECT id, city
+			FROM ' . $this->db->prefix . $GLOBALS['DB_TABLE'] . '
+			WHERE last_name = :last_name';
+		$this->db->query($sql);
+		$this->db->bind(':last_name', 'Trujillo');
+		$this->assertEquals(2, $this->db->fetchColumn());
+		$this->assertEquals('Mexico', $this->db->fetchColumn(1));
+	}
+
+	public function testRowCount() {
+		$sql = 'SELECT id FROM ' . $this->db->prefix . $GLOBALS['DB_TABLE'];
+		$this->db->query($sql);
+		$this->db->execute();
+		$this->assertEquals(6, $this->db->rowCount());
+	}
+
+	public function testColumnCount() {
+		$sql = 'SELECT * FROM ' . $this->db->prefix . $GLOBALS['DB_TABLE'];
+		$this->db->query($sql);
+		$this->db->execute();
+		$this->assertEquals(4, $this->db->columnCount());
 	}
 }
