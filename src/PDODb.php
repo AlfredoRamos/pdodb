@@ -2,7 +2,7 @@
 
 /**
  * A simple PDO wrapper
- * @link https://github.com/AlfredoRamos/pdodb
+ * https://github.com/AlfredoRamos/pdodb
  * @author Alfredo Ramos <alfredo.ramos@yandex.com>
  * @copyright 2013 Alfredo Ramos
  * @license GNU GPL 3.0+
@@ -145,7 +145,8 @@ class PDODb implements Interfaces\PDODbInterface {
 
 	/**
 	 * Get multiple records
-	 * @param	integer	$mode	<https://secure.php.net/manual/en/pdostatement.fetch.php>
+	 * https://secure.php.net/manual/en/pdostatement.fetch.php
+	 * @param	integer	$mode
 	 * @return	array
 	 */
 	public function fetchAll($mode = null) {
@@ -164,7 +165,8 @@ class PDODb implements Interfaces\PDODbInterface {
 
 	/**
 	 * Get single record
-	 * @param	integer	$mode	<https://secure.php.net/manual/en/pdostatement.fetch.php>
+	 * https://secure.php.net/manual/en/pdostatement.fetch.php
+	 * @param	integer	$mode
 	 * @return	object
 	 */
 	public function fetch($mode = null) {
@@ -182,7 +184,7 @@ class PDODb implements Interfaces\PDODbInterface {
 	}
 
 	/**
-	 * Get meta-data for a single field
+	 * Get single field
 	 * @param	string	$name
 	 * @return	array|object|null
 	 */

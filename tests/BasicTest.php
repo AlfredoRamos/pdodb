@@ -2,7 +2,7 @@
 
 /**
  * A simple PDO wrapper
- * @link https://github.com/AlfredoRamos/pdodb
+ * https://github.com/AlfredoRamos/pdodb
  * @author Alfredo Ramos <alfredo.ramos@yandex.com>
  * @copyright 2013 Alfredo Ramos
  * @license GNU GPL 3.0+
