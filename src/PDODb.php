@@ -13,7 +13,7 @@ namespace AlfredoRamos\PDODb;
 use PDO;
 use PDOException;
 
-class PDODb implements Interfaces\PDODbInterface {
+class PDODb implements PDODbInterface {
 
 	/** @var \PDO $dbh */
 	private $dbh;

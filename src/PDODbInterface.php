@@ -8,7 +8,7 @@
  * @license GNU GPL 3.0+
  */
 
-namespace AlfredoRamos\PDODb\Interfaces;
+namespace AlfredoRamos\PDODb;
 
 interface PDODbInterface {
 	public function query($sql = '');
