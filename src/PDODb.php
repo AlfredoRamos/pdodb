@@ -15,16 +15,21 @@ use PDOException;
 
 class PDODb implements Interfaces\PDODbInterface {
 
+	/** @var \PDO $dbh */
 	private $dbh;
+
+	/** @var \PDOStatement $stmt */
 	private $stmt;
+
+	/** @var string $prefix */
 	public $prefix;
 
 	/**
 	 * Constructor
 	 *
-	 * @param	array	$config
+	 * @param array	$config
 	 *
-	 * @return	void
+	 * @return void
 	 */
 	public function __construct($config = []) {
 		// Default options
@@ -74,9 +79,11 @@ class PDODb implements Interfaces\PDODbInterface {
 	/**
 	 * Make a query
 	 *
-	 * @param	string	$sql
+	 * @param string	$sql
 	 *
-	 * @return	PDOStatement|PDOException
+	 * @throws \PDOException
+	 *
+	 * @return \PDOStatement
 	 */
 	public function query($sql = '') {
 		$this->stmt = $this->dbh->prepare($sql);
@@ -87,11 +94,11 @@ class PDODb implements Interfaces\PDODbInterface {
 	/**
 	 * Bind the data
 	 *
-	 * @param	string	$param
-	 * @param	string	$value
-	 * @param	integer|bool|null|string	$type
+	 * @param string					$param
+	 * @param string					$value
+	 * @param integer|bool|null|string	$type
 	 *
-	 * @return	bool
+	 * @return bool
 	 */
 	public function bind($param = '', $value = '', $type = null) {
 		if (is_null($type)) {
@@ -117,11 +124,11 @@ class PDODb implements Interfaces\PDODbInterface {
 	/**
 	 * Bind the data from an array
 	 *
-	 * @see		AlfredoRamos\PDODb::bind()
+	 * @see \AlfredoRamos\PDODb::bind()
 	 *
-	 * @param	array	$param
+	 * @param array	$param
 	 *
-	 * @return	bool
+	 * @return void
 	 */
 	public function bindArray($param = []) {
 		array_map(
@@ -134,7 +141,7 @@ class PDODb implements Interfaces\PDODbInterface {
 	/**
 	 * Executhe the query
 	 *
-	 * @return	bool
+	 * @return bool
 	 */
 	public function execute() {
 		return $this->stmt->execute();
@@ -143,9 +150,9 @@ class PDODb implements Interfaces\PDODbInterface {
 	/**
 	 * Get single record
 	 *
-	 * @param	integer	$mode
+	 * @param integer	$mode
 	 *
-	 * @return	object
+	 * @return object
 	 */
 	public function fetch($mode = null) {
 		$this->execute();
@@ -160,9 +167,9 @@ class PDODb implements Interfaces\PDODbInterface {
 	/**
 	 * Get multiple records
 	 *
-	 * @param	integer	$mode
+	 * @param integer	$mode
 	 *
-	 * @return	array
+	 * @return array
 	 */
 	public function fetchAll($mode = null) {
 		$this->execute();
@@ -177,9 +184,9 @@ class PDODb implements Interfaces\PDODbInterface {
 	/**
 	 * Get single field (column) by index
 	 *
-	 * @param	integer	$column
+	 * @param integer	$column
 	 *
-	 * @return	string|integer|float|null
+	 * @return string|integer|float|null
 	 */
 	public function fetchColumn($column = 0) {
 		$this->execute();
@@ -190,9 +197,9 @@ class PDODb implements Interfaces\PDODbInterface {
 	/**
 	 * Get single field (column) by name
 	 *
-	 * @param	string	$name
+	 * @param string	$name
 	 *
-	 * @return	string|integer|float|null
+	 * @return string|integer|float|null
 	 */
 	public function fetchField($name = '') {
 		$this->execute();
@@ -215,7 +222,7 @@ class PDODb implements Interfaces\PDODbInterface {
 	/**
 	 * Get number of affected rows
 	 *
-	 * @return	integer
+	 * @return integer
 	 */
 	public function rowCount() {
 		return $this->stmt->rowCount();
@@ -233,7 +240,7 @@ class PDODb implements Interfaces\PDODbInterface {
 	/**
 	 * Get last inserted id
 	 *
-	 * @return	integer
+	 * @return integer
 	 */
 	public function lastInsertId() {
 		return $this->dbh->lastInsertId();
@@ -242,7 +249,7 @@ class PDODb implements Interfaces\PDODbInterface {
 	/**
 	 * Run transaction
 	 *
-	 * @return	bool
+	 * @return bool
 	 */
 	public function beginTransaction() {
 		return $this->dbh->beginTransaction();
@@ -251,7 +258,7 @@ class PDODb implements Interfaces\PDODbInterface {
 	/**
 	 * Stop transaction
 	 *
-	 * @return	bool
+	 * @return bool
 	 */
 	public function endTransaction() {
 		return $this->dbh->commit();
@@ -260,7 +267,7 @@ class PDODb implements Interfaces\PDODbInterface {
 	/**
 	 * Cancel transaction
 	 *
-	 * @return	bool
+	 * @return bool
 	 */
 	public function cancelTransaction() {
 		return $this->dbh->rollBack();
@@ -269,7 +276,7 @@ class PDODb implements Interfaces\PDODbInterface {
 	/**
 	 * Dumps info contained in prepared statement
 	 *
-	 * @return	void
+	 * @return void
 	 */
 	public function debugDumpParams() {
 		return $this->stmt->debugDumpParams();
