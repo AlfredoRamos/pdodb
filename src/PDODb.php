@@ -152,12 +152,19 @@ class PDODb implements Interfaces\PDODbInterface {
 	 *
 	 * @param integer	$mode
 	 *
-	 * @return object
+	 * @return object|array
 	 */
 	public function fetch($mode = null) {
 		$this->execute();
 
-		if (is_int($mode)) {
+		$fetch_modes = [
+			PDO::FETCH_ASSOC,
+			PDO::FETCH_NUM,
+			PDO::FETCH_OBJ,
+			PDO::FETCH_NAMED
+		];
+
+		if (in_array($mode, $fetch_modes, true)) {
 			$this->stmt->setFetchMode($mode);
 		}
 
@@ -174,7 +181,14 @@ class PDODb implements Interfaces\PDODbInterface {
 	public function fetchAll($mode = null) {
 		$this->execute();
 
-		if (is_int($mode)) {
+		$fetch_modes = [
+			PDO::FETCH_ASSOC,
+			PDO::FETCH_NUM,
+			PDO::FETCH_OBJ,
+			PDO::FETCH_NAMED
+		];
+
+		if (in_array($mode, $fetch_modes, true)) {
 			$this->stmt->setFetchMode($mode);
 		}
 
@@ -186,7 +200,7 @@ class PDODb implements Interfaces\PDODbInterface {
 	 *
 	 * @param integer	$column
 	 *
-	 * @return string|integer|float|null
+	 * @return string|integer|float|null|bool
 	 */
 	public function fetchColumn($column = 0) {
 		$this->execute();
