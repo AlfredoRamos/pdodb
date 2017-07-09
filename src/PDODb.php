@@ -62,18 +62,13 @@ class PDODb implements Interfaces\PDODbInterface {
 		// Table prefix
 		$this->prefix = $config['prefix'];
 
-		try {
-			// Create a new PDO instanace
-			$this->dbh = new PDO(
-				$config['dsn'],
-				$config['user'],
-				$config['password'],
-				$config['options']
-			);
-		} catch (PDOException $ex) {
-			trigger_error($ex->getMessage(), E_USER_ERROR);
-		}
-
+		// Create a new PDO instanace
+		$this->dbh = new PDO(
+			$config['dsn'],
+			$config['user'],
+			$config['password'],
+			$config['options']
+		);
 	}
 
 	/**
@@ -84,11 +79,7 @@ class PDODb implements Interfaces\PDODbInterface {
 	 * @return	PDOStatement|PDOException
 	 */
 	public function query($sql = '') {
-		try {
-			$this->stmt = $this->dbh->prepare($sql);
-		} catch (PDOException $ex) {
-			trigger_error($ex->getMessage(), E_USER_ERROR);
-		}
+		$this->stmt = $this->dbh->prepare($sql);
 
 		return $this->stmt;
 	}
@@ -120,11 +111,7 @@ class PDODb implements Interfaces\PDODbInterface {
 			}
 		}
 
-		try {
-			return $this->stmt->bindValue($param, $value, $type);
-		} catch (PDOException $ex) {
-			trigger_error($ex->getMessage(), E_USER_ERROR);
-		}
+		return $this->stmt->bindValue($param, $value, $type);
 	}
 
 	/**
@@ -163,12 +150,8 @@ class PDODb implements Interfaces\PDODbInterface {
 	public function fetch($mode = null) {
 		$this->execute();
 
-		try {
-			if (is_int($mode)) {
-				$this->stmt->setFetchMode($mode);
-			}
-		} catch (PDOException $ex) {
-			trigger_error($ex->getMessage(), E_USER_ERROR);
+		if (is_int($mode)) {
+			$this->stmt->setFetchMode($mode);
 		}
 
 		return $this->stmt->fetch();
@@ -184,12 +167,8 @@ class PDODb implements Interfaces\PDODbInterface {
 	public function fetchAll($mode = null) {
 		$this->execute();
 
-		try {
-			if (is_int($mode)) {
-				$this->stmt->setFetchMode($mode);
-			}
-		} catch (PDOException $ex) {
-			trigger_error($ex->getMessage(), E_USER_ERROR);
+		if (is_int($mode)) {
+			$this->stmt->setFetchMode($mode);
 		}
 
 		return $this->stmt->fetchAll();
