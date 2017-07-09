@@ -73,6 +73,9 @@ class PDODb implements PDODbInterface {
 			$config['password'],
 			$config['options']
 		);
+
+		// Remove configuration
+		unset($config);
 	}
 
 	/**
