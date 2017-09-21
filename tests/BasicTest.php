@@ -81,4 +81,5 @@ class BasicTest extends TestCase {
 		$this->db->execute();
 		$this->assertEquals(4, $this->db->columnCount());
 	}
+
 }
