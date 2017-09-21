@@ -1,8 +1,8 @@
 ### About
 
-A simple PDO wrapper.
+A simple PDO wrapper
 
-[![Build Status](https://img.shields.io/travis/AlfredoRamos/pdodb.svg?style=flat-square&maxAge=3600)](https://travis-ci.org/AlfredoRamos/pdodb) [![Latest Stable Version](https://img.shields.io/github/tag/AlfredoRamos/pdodb.svg?style=flat-square&label=stable&maxAge=3600)](https://github.com/AlfredoRamos/pdodb/releases) [![License](https://img.shields.io/github/license/AlfredoRamos/pdodb.svg?style=flat-square)](https://raw.githubusercontent.com/AlfredoRamos/pdodb/master/LICENSE)
+[![Build Status](https://img.shields.io/travis/AlfredoRamos/pdodb.svg?style=flat-square&maxAge=3600)](https://travis-ci.org/AlfredoRamos/pdodb) [![Latest Stable Version](https://img.shields.io/github/tag/AlfredoRamos/pdodb.svg?style=flat-square&label=stable&maxAge=3600)](https://github.com/AlfredoRamos/pdodb/releases) [![Codacy Code Quality](https://img.shields.io/codacy/grade/cf5b1c496a5e4945adf5ce02593468ee.svg?style=flat-square&maxAge=3600)](https://www.codacy.com/app/AlfredoRamos/pdodb) [![Codacy Code Coverage](https://img.shields.io/codacy/coverage/cf5b1c496a5e4945adf5ce02593468ee.svg?style=flat-square&maxAge=3600)](https://www.codacy.com/app/AlfredoRamos/pdodb) [![License](https://img.shields.io/github/license/AlfredoRamos/pdodb.svg?style=flat-square)](https://raw.githubusercontent.com/AlfredoRamos/pdodb/master/LICENSE)
 
 ### Installation
 
@@ -35,21 +35,29 @@ Add the following line in the `require` object:
 
 Then run `composer install` or `composer update` on your terminal.
 
-### Configuration
-
-The constructor takes an array with all the values needed to connect to the database, see `AlfredoRamos\PDODb\PDODb::__construct()` (`src/PDODb.php`) for more info.
-
 ### Usage
 
-**Autoloading**
+The constructor takes an array with all the values needed to connect to the database.
 
 ```php
 require __DIR__ . '/vendor/autoload.php';
 
+// Default configuration values
 $db = new \AlfredoRamos\PDODb\PDODb([
-	'user'		=> 'test_user',
-	'password'	=> 'test_password',
-	'database'	=> 'test_database'
+	'driver'	=> 'mysql',
+	'host'		=> 'localhost',
+	'port'		=> 3306,
+	'database'	=> '',
+	'charset'	=> 'utf-8',
+	'user'		=> '',
+	'password'	=> '',
+	'prefix'	=> '',
+	'options'	=> [
+		PDO::ATTR_EMULATE_PREPARES		=> false,
+		PDO::ATTR_ERRMODE				=> PDO::ERRMODE_EXCEPTION,
+		PDO::ATTR_DEFAULT_FETCH_MODE	=> PDO::FETCH_OBJ,
+		PDO::ATTR_PERSISTENT			=> true
+	]
 ]);
 ```
 
