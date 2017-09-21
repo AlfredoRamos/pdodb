@@ -23,4 +23,12 @@
 		<var name="DB_TABLE" value="users" />
 		<var name="DB_TPREFIX" value="t_" />
 	</php>
+	<filter>
+		<whitelist processUncoveredFilesFromWhitelist="true">
+			<directory suffix=".php">./src/</directory>
+		</whitelist>
+	</filter>
+	<logging>
+		<log type="coverage-xml" target="./build/coverage-xml/" />
+	</logging>
 </phpunit>
