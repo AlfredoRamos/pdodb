@@ -59,15 +59,20 @@ class PDODb implements PDODbInterface {
 		);
 
 		// Default PDO options
-		$config['dsn']	= vsprintf(
-			'%1$s:host=%2$s;port=%3$u;dbname=%4$s;charset=%5$s', [
+		$config['dsn'] = vsprintf(
+			'%1$s:host=%2$s;port=%3$u;charset=%4$s;',
+			[
 				$config['driver'],
 				$config['host'],
 				$config['port'],
-				$config['database'],
 				$config['charset']
 			]
 		);
+
+		// Add database to DSN if database name is not empty
+		if (!empty($config['database'])) {
+			$config['dsn'] .= sprintf('dbname=%s;', $config['database']);
+		}
 
 		// Table prefix
 		$this->prefix = $config['prefix'];

@@ -21,40 +21,54 @@ use PDOException;
 class BasicTest extends TestCase {
 
 	/** @var \AlfredoRamos\PDODb\PDODb $pdodb */
-	protected static $pdodb;
+	protected $pdodb;
 
 	/** @var string $table */
-	protected static $table;
+	protected $table;
 
 	/**
 	 * @backupGlobals enabled
 	 */
 	public static function setUpBeforeClass() {
 		// Database instance
-		self::$pdodb = new PDODb([
+		$pdodb = new PDODb([
 			'user'		=> $GLOBALS['DB_USER'],
-			'database'	=> $GLOBALS['DB_DBNAME'],
 			'prefix'	=> $GLOBALS['DB_TPREFIX']
 		]);
 
-		// Table name
-		self::$table = $GLOBALS['DB_TABLE'];
+		// Drop database
+		$sql = 'DROP DATABASE IF EXISTS ' . $GLOBALS['DB_DBNAME'];
+		$pdodb->query($sql);
+		$pdodb->execute();
+
+		// Create database
+		$sql = 'CREATE DATABASE IF NOT EXISTS ' . $GLOBALS['DB_DBNAME'];
+		$pdodb->query($sql);
+		$pdodb->execute();
 
 		// Drop test table
-		$sql = 'DROP TABLE IF EXISTS ' . self::$pdodb->prefix . self::$table;
-		self::$pdodb->query($sql);
-		self::$pdodb->execute();
+		$sql = 'DROP TABLE IF EXISTS ' . vsprintf('%1$s.%2$s%3$s', [
+			$GLOBALS['DB_DBNAME'],
+			$pdodb->prefix,
+			$GLOBALS['DB_TABLE']
+		]);
+		$pdodb->query($sql);
+		$pdodb->execute();
 
 		// Create test table
-		$sql = 'CREATE TABLE ' . self::$pdodb->prefix . self::$table . ' (
+		$sql = 'CREATE TABLE IF NOT EXISTS ' . vsprintf('%1$s.%2$s%3$s', [
+			$GLOBALS['DB_DBNAME'],
+			$pdodb->prefix,
+			$GLOBALS['DB_TABLE']
+		]) . ' (
 			id int(11) NOT NULL AUTO_INCREMENT,
 			first_name varchar(50) COLLATE utf8_unicode_ci NOT NULL,
 			last_name varchar(50) COLLATE utf8_unicode_ci NOT NULL,
 			city varchar(50) COLLATE utf8_unicode_ci NOT NULL,
 			PRIMARY KEY (`id`)
 		) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci';
-		self::$pdodb->query($sql);
-		self::$pdodb->execute();
+		$pdodb->query($sql);
+		$pdodb->execute();
 
 		// Insert initial data
 		$users = [
@@ -64,25 +78,38 @@ class BasicTest extends TestCase {
 			['Patricia', 'McKenna', 'Ireland'],
 			['Frédérique', 'Citeaux', 'France']
 		];
-		$sql = 'INSERT INTO ' . self::$pdodb->prefix . self::$table . '
-				(first_name, last_name, city)
-				VALUES (:first_name, :last_name, :city)';
-		self::$pdodb->query($sql);
+		$sql = 'INSERT INTO ' . vsprintf('%1$s.%2$s%3$s', [
+			$GLOBALS['DB_DBNAME'],
+			$pdodb->prefix,
+			$GLOBALS['DB_TABLE']
+		]) . ' (first_name, last_name, city)
+			VALUES (:first_name, :last_name, :city)';
+		$pdodb->query($sql);
 
-		self::$pdodb->beginTransaction();
+		$pdodb->beginTransaction();
 		foreach ($users as $user) {
-			self::$pdodb->bindArray([
+			$pdodb->bindArray([
 				':first_name'	=> $user[0],
 				':last_name'	=> $user[1],
 				':city'			=> $user[2]
 			]);
-			self::$pdodb->execute();
+			$pdodb->execute();
 		}
-		self::$pdodb->endTransaction();
+		$pdodb->endTransaction();
+	}
+
+	public function setUp() {
+		$this->pdodb = new PDODb([
+			'user'		=> $GLOBALS['DB_USER'],
+			'database'	=> $GLOBALS['DB_DBNAME'],
+			'prefix'	=> $GLOBALS['DB_TPREFIX']
+		]);
+
+		$this->table = $this->pdodb->prefix . $GLOBALS['DB_TABLE'];
 	}
 
 	public function testInstance() {
-		$this->assertInstanceOf(PDODb::class, self::$pdodb);
+		$this->assertInstanceOf(PDODb::class, $this->pdodb);
 	}
 
 	public function testInvalidInstance() {
@@ -91,54 +118,54 @@ class BasicTest extends TestCase {
 	}
 
 	public function testTableExists() {
-		$sql = 'SHOW TABLES LIKE "' . self::$pdodb->prefix . self::$table . '"';
-		self::$pdodb->query($sql);
-		$this->assertFalse(empty(self::$pdodb->fetch()));
+		$sql = 'SHOW TABLES LIKE "' . $this->table . '"';
+		$this->pdodb->query($sql);
+		$this->assertFalse(empty($this->pdodb->fetch()));
 	}
 
 	public function testTotalUsers() {
 		$sql = 'SELECT COUNT(id) as total_users
-			FROM ' . self::$pdodb->prefix . self::$table;
-		self::$pdodb->query($sql);
-		$this->assertEquals(5, self::$pdodb->fetchField('total_users'));
+			FROM ' . $this->table;
+		$this->pdodb->query($sql);
+		$this->assertEquals(5, $this->pdodb->fetchField('total_users'));
 	}
 
 	public function testInsertToTable() {
-		$sql = 'INSERT INTO ' . self::$pdodb->prefix . self::$table . '
+		$sql = 'INSERT INTO ' . $this->table . '
 			(first_name, last_name, city)
 			VALUES (:first_name, :last_name, :city)';
-		self::$pdodb->query($sql);
-		self::$pdodb->bindArray([
+		$this->pdodb->query($sql);
+		$this->pdodb->bindArray([
 			':first_name'	=> 'Yang',
 			':last_name'	=> 'Wang',
 			':city'			=> 'Switzerland'
 		]);
-		self::$pdodb->execute();
-		$this->assertEquals(6, self::$pdodb->lastInsertId());
+		$this->pdodb->execute();
+		$this->assertEquals(6, $this->pdodb->lastInsertId());
 	}
 
 	public function testFetchColumn() {
 		$sql = 'SELECT id, city
-			FROM ' . self::$pdodb->prefix . self::$table . '
+			FROM ' . $this->table . '
 			WHERE last_name = :last_name';
-		self::$pdodb->query($sql);
-		self::$pdodb->bind(':last_name', 'Trujillo');
-		$this->assertEquals(2, self::$pdodb->fetchColumn());
-		$this->assertEquals('Mexico', self::$pdodb->fetchColumn(1));
+		$this->pdodb->query($sql);
+		$this->pdodb->bind(':last_name', 'Trujillo');
+		$this->assertEquals(2, $this->pdodb->fetchColumn());
+		$this->assertEquals('Mexico', $this->pdodb->fetchColumn(1));
 	}
 
 	public function testRowCount() {
-		$sql = 'SELECT id FROM ' . self::$pdodb->prefix . self::$table;
-		self::$pdodb->query($sql);
-		self::$pdodb->execute();
-		$this->assertEquals(6, self::$pdodb->rowCount());
+		$sql = 'SELECT id FROM ' . $this->table;
+		$this->pdodb->query($sql);
+		$this->pdodb->execute();
+		$this->assertEquals(6, $this->pdodb->rowCount());
 	}
 
 	public function testColumnCount() {
-		$sql = 'SELECT * FROM ' . self::$pdodb->prefix . self::$table;
-		self::$pdodb->query($sql);
-		self::$pdodb->execute();
-		$this->assertEquals(4, self::$pdodb->columnCount());
+		$sql = 'SELECT * FROM ' . $this->table;
+		$this->pdodb->query($sql);
+		$this->pdodb->execute();
+		$this->assertEquals(4, $this->pdodb->columnCount());
 	}
 
 }
