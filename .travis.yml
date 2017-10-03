@@ -34,10 +34,6 @@ before_install:
 install:
   - travis_retry composer install --prefer-dist --no-interaction
 
-before_script:
-  - mysql -u root < travis/schema_test_db.sql
-  - mysql -u root < travis/data_test_db.sql
-
 script:
   - vendor/bin/phpunit
 
