@@ -98,7 +98,12 @@ class BasicTest extends TestCase {
 		$pdodb->endTransaction();
 	}
 
-	public function setUp() {
+	/**
+	 * @backupGlobals enabled
+	 */
+	protected function setUp() {
+		parent::setUp();
+
 		$this->pdodb = new PDODb([
 			'user'		=> $GLOBALS['DB_USER'],
 			'database'	=> $GLOBALS['DB_DBNAME'],
@@ -114,7 +119,7 @@ class BasicTest extends TestCase {
 
 	public function testInvalidInstance() {
 		$this->expectException(PDOException::class);
-		$db = new PDODb;
+		$pdodb = new PDODb;
 	}
 
 	public function testTableExists() {
