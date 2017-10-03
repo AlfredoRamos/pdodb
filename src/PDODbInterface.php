@@ -2,10 +2,11 @@
 
 /**
  * A simple PDO wrapper
- * https://github.com/AlfredoRamos/pdodb
+ *
  * @author Alfredo Ramos <alfredo.ramos@yandex.com>
  * @copyright 2013 Alfredo Ramos
- * @license GNU GPL 3.0+
+ * @license GPL-3.0+
+ * @link https://github.com/AlfredoRamos/pdodb
  */
 
 namespace AlfredoRamos\PDODb;
@@ -18,7 +19,7 @@ interface PDODbInterface {
 	public function fetch($mode = null);
 	public function fetchAll($mode = null);
 	public function fetchColumn($column = 0);
-	public function fetchField($name = '');
+	public function fetchField($name = '', $mode = null);
 	public function rowCount();
 	public function columnCount();
 	public function lastInsertId();

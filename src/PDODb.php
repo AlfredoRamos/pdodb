@@ -2,10 +2,11 @@
 
 /**
  * A simple PDO wrapper
- * https://github.com/AlfredoRamos/pdodb
+ *
  * @author Alfredo Ramos <alfredo.ramos@yandex.com>
  * @copyright 2013 Alfredo Ramos
- * @license GNU GPL 3.0+
+ * @license GPL-3.0+
+ * @link https://github.com/AlfredoRamos/pdodb
  */
 
 namespace AlfredoRamos\PDODb;
@@ -20,13 +21,18 @@ class PDODb implements PDODbInterface {
 	/** @var \PDOStatement $stmt */
 	private $stmt;
 
+	/** @var array $fetchModes */
+	private $fetchModes;
+
 	/** @var string $prefix */
 	public $prefix;
 
 	/**
-	 * Constructor
+	 * Constructor.
 	 *
-	 * @param array	$config
+	 * @param array $config
+	 *
+	 * @throws \PDOException
 	 *
 	 * @return void
 	 */
@@ -76,12 +82,20 @@ class PDODb implements PDODbInterface {
 
 		// Remove configuration
 		unset($config);
+
+		// Allowed fetch modes
+		$this->fetchModes = [
+			PDO::FETCH_ASSOC,
+			PDO::FETCH_NUM,
+			PDO::FETCH_OBJ,
+			PDO::FETCH_NAMED
+		];
 	}
 
 	/**
-	 * Make a query
+	 * Make a query with a prepared statement.
 	 *
-	 * @param string	$sql
+	 * @param string $sql
 	 *
 	 * @throws \PDOException
 	 *
@@ -94,11 +108,11 @@ class PDODb implements PDODbInterface {
 	}
 
 	/**
-	 * Bind the data
+	 * Bind the data.
 	 *
 	 * @param string					$param
 	 * @param string					$value
-	 * @param integer|bool|null|string	$type
+	 * @param string|integer|bool|null	$type
 	 *
 	 * @return bool
 	 */
@@ -124,11 +138,11 @@ class PDODb implements PDODbInterface {
 	}
 
 	/**
-	 * Bind the data from an array
+	 * Bind the data from an array.
 	 *
 	 * @see \AlfredoRamos\PDODb::bind()
 	 *
-	 * @param array	$param
+	 * @param array $param
 	 *
 	 * @return void
 	 */
@@ -141,7 +155,7 @@ class PDODb implements PDODbInterface {
 	}
 
 	/**
-	 * Executhe the query
+	 * Executhe the query.
 	 *
 	 * @return bool
 	 */
@@ -150,23 +164,19 @@ class PDODb implements PDODbInterface {
 	}
 
 	/**
-	 * Get single record
+	 * Get single record.
 	 *
-	 * @param integer	$mode
+	 * @param integer $mode
+	 *
+	 * @throws \PDOException
 	 *
 	 * @return object|array
 	 */
 	public function fetch($mode = null) {
 		$this->execute();
 
-		$fetchModes = [
-			PDO::FETCH_ASSOC,
-			PDO::FETCH_NUM,
-			PDO::FETCH_OBJ,
-			PDO::FETCH_NAMED
-		];
-
-		if (in_array($mode, $fetchModes, true)) {
+		// Change fetch mode
+		if (in_array($mode, $this->fetchModes, true)) {
 			$this->stmt->setFetchMode($mode);
 		}
 
@@ -174,23 +184,19 @@ class PDODb implements PDODbInterface {
 	}
 
 	/**
-	 * Get multiple records
+	 * Get multiple records.
 	 *
-	 * @param integer	$mode
+	 * @param integer $mode
+	 *
+	 * @throws \PDOException
 	 *
 	 * @return array
 	 */
 	public function fetchAll($mode = null) {
 		$this->execute();
 
-		$fetchModes = [
-			PDO::FETCH_ASSOC,
-			PDO::FETCH_NUM,
-			PDO::FETCH_OBJ,
-			PDO::FETCH_NAMED
-		];
-
-		if (in_array($mode, $fetchModes, true)) {
+		// Change fetch mode
+		if (in_array($mode, $this->fetchModes, true)) {
 			$this->stmt->setFetchMode($mode);
 		}
 
@@ -198,9 +204,9 @@ class PDODb implements PDODbInterface {
 	}
 
 	/**
-	 * Get single field (column) by index
+	 * Get single field (column) by index.
 	 *
-	 * @param integer	$column
+	 * @param integer $column
 	 *
 	 * @return string|integer|float|null|bool
 	 */
@@ -211,14 +217,21 @@ class PDODb implements PDODbInterface {
 	}
 
 	/**
-	 * Get single field (column) by name
+	 * Get single field (column) by name.
 	 *
-	 * @param string	$name
+	 * @param string $name
+	 *
+	 * @throws \PDOException
 	 *
 	 * @return string|integer|float|null
 	 */
-	public function fetchField($name = '') {
+	public function fetchField($name = '', $mode = null) {
 		$this->execute();
+
+		// Change fetch mode
+		if (in_array($mode, $this->fetchModes, true)) {
+			$this->stmt->setFetchMode($mode);
+		}
 
 		// Fetch the row
 		$row = $this->fetch();
@@ -236,7 +249,7 @@ class PDODb implements PDODbInterface {
 	}
 
 	/**
-	 * Get number of affected rows
+	 * Get number of affected rows.
 	 *
 	 * @return integer
 	 */
@@ -245,7 +258,7 @@ class PDODb implements PDODbInterface {
 	}
 
 	/**
-	 * Get number of columns in the result set
+	 * Get number of columns in the result set.
 	 *
 	 * @return integer
 	 */
@@ -254,7 +267,7 @@ class PDODb implements PDODbInterface {
 	}
 
 	/**
-	 * Get last inserted id
+	 * Get last inserted ID.
 	 *
 	 * @return integer
 	 */
@@ -263,7 +276,9 @@ class PDODb implements PDODbInterface {
 	}
 
 	/**
-	 * Run transaction
+	 * Run transaction.
+	 *
+	 * @throws \PDOException
 	 *
 	 * @return bool
 	 */
@@ -272,7 +287,9 @@ class PDODb implements PDODbInterface {
 	}
 
 	/**
-	 * Stop transaction
+	 * Stop transaction.
+	 *
+	 * @throws \PDOException
 	 *
 	 * @return bool
 	 */
@@ -281,7 +298,9 @@ class PDODb implements PDODbInterface {
 	}
 
 	/**
-	 * Cancel transaction
+	 * Cancel transaction.
+	 *
+	 * @throws \PDOException
 	 *
 	 * @return bool
 	 */
@@ -290,7 +309,7 @@ class PDODb implements PDODbInterface {
 	}
 
 	/**
-	 * Dumps info contained in prepared statement
+	 * Dumps info contained in prepared statement.
 	 *
 	 * @return void
 	 */
