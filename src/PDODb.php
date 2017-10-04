@@ -335,9 +335,8 @@ class PDODb implements PDODbInterface {
 	 * @return void
 	 */
 	public function close() {
-		unset($this->prefix);
-		unset($this->stmt);
-		unset($this->dbh);
+		$this->stmt = null;
+		$this->dbh = null;
 	}
 
 }
