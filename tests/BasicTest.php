@@ -120,6 +120,7 @@ class BasicTest extends TestCase {
 	public function testInvalidInstance() {
 		$this->expectException(PDOException::class);
 		$pdodb = new PDODb;
+		$pdodb->close();
 	}
 
 	public function testTableExists() {

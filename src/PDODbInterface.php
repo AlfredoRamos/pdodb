@@ -27,4 +27,5 @@ interface PDODbInterface {
 	public function endTransaction();
 	public function cancelTransaction();
 	public function debugDumpParams();
+	public function close();
 }

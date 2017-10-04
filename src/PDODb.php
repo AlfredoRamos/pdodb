@@ -322,4 +322,15 @@ class PDODb implements PDODbInterface {
 		return $this->stmt->debugDumpParams();
 	}
 
+	/**
+	 * Close connection.
+	 *
+	 * @return void
+	 */
+	public function close() {
+		unset($this->prefix);
+		unset($this->stmt);
+		unset($this->dbh);
+	}
+
 }
