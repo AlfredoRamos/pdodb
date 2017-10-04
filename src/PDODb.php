@@ -12,6 +12,8 @@
 namespace AlfredoRamos\PDODb;
 
 use PDO;
+use PDOException;
+use RuntimeException;
 
 class PDODb implements PDODbInterface {
 
@@ -78,12 +80,17 @@ class PDODb implements PDODbInterface {
 		$this->prefix = $config['prefix'];
 
 		// Create a new PDO instanace
-		$this->dbh = new PDO(
-			$config['dsn'],
-			$config['user'],
-			$config['password'],
-			$config['options']
-		);
+		try {
+			$this->dbh = new PDO(
+				$config['dsn'],
+				$config['user'],
+				$config['password'],
+				$config['options']
+			);
+		} catch (PDOException $ex) {
+			// Hide stack trace that contains the password
+			throw new RuntimeException($ex->getMessage(), $ex->getCode());
+		}
 
 		// Remove configuration
 		unset($config);
