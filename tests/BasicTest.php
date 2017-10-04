@@ -14,6 +14,7 @@ namespace AlfredoRamos\Tests;
 use AlfredoRamos\PDODb\PDODb;
 use PHPUnit\Framework\TestCase;
 use RuntimeException;
+use PDOException;
 
 /**
  * @group basic
@@ -112,7 +113,7 @@ class BasicTest extends TestCase {
 			'prefix'	=> $GLOBALS['DB_TPREFIX']
 		]);
 
-		$this->table = $this->pdodb->prefix . $GLOBALS['DB_TABLE'];
+		$this->table = $GLOBALS['DB_TABLE'];
 	}
 
 	protected function tearDown() {
@@ -125,27 +126,35 @@ class BasicTest extends TestCase {
 		$this->assertInstanceOf(PDODb::class, $this->pdodb);
 	}
 
-	public function testInvalidInstance() {
+	public function testFailedConnection() {
 		$this->expectException(RuntimeException::class);
 		$pdodb = new PDODb;
 		$pdodb->close();
 	}
 
 	public function testTableExists() {
-		$sql = 'SHOW TABLES LIKE "' . $this->table . '"';
+		$sql = 'SHOW TABLES LIKE "' . $this->pdodb->prefix . $this->table . '"';
 		$this->pdodb->query($sql);
 		$this->assertFalse(empty($this->pdodb->fetch()));
 	}
 
+	public function testWrongTablePrefix() {
+		$this->expectException(PDOException::class);
+		$sql = 'SELECT * FROM ' . 'inv_' . $this->table;
+		$this->pdodb->query($sql);
+		$this->pdodb->execute();
+		$this->assertEquals(0, $this->pdodb->columnCount());
+	}
+
 	public function testTotalUsers() {
 		$sql = 'SELECT COUNT(id) as total_users
-			FROM ' . $this->table;
+			FROM ' . $this->pdodb->prefix . $this->table;
 		$this->pdodb->query($sql);
 		$this->assertEquals(5, $this->pdodb->fetchField('total_users'));
 	}
 
 	public function testInsertToTable() {
-		$sql = 'INSERT INTO ' . $this->table . '
+		$sql = 'INSERT INTO ' . $this->pdodb->prefix . $this->table . '
 			(first_name, last_name, city)
 			VALUES (:first_name, :last_name, :city)';
 		$this->pdodb->query($sql);
@@ -160,7 +169,7 @@ class BasicTest extends TestCase {
 
 	public function testFetchColumn() {
 		$sql = 'SELECT id, city
-			FROM ' . $this->table . '
+			FROM ' . $this->pdodb->prefix . $this->table . '
 			WHERE last_name = :last_name';
 		$this->pdodb->query($sql);
 		$this->pdodb->bind(':last_name', 'Trujillo');
@@ -169,14 +178,14 @@ class BasicTest extends TestCase {
 	}
 
 	public function testRowCount() {
-		$sql = 'SELECT id FROM ' . $this->table;
+		$sql = 'SELECT id FROM ' . $this->pdodb->prefix . $this->table;
 		$this->pdodb->query($sql);
 		$this->pdodb->execute();
 		$this->assertEquals(6, $this->pdodb->rowCount());
 	}
 
 	public function testColumnCount() {
-		$sql = 'SELECT * FROM ' . $this->table;
+		$sql = 'SELECT * FROM ' . $this->pdodb->prefix . $this->table;
 		$this->pdodb->query($sql);
 		$this->pdodb->execute();
 		$this->assertEquals(4, $this->pdodb->columnCount());
