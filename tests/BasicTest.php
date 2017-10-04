@@ -13,7 +13,7 @@ namespace AlfredoRamos\Tests;
 
 use AlfredoRamos\PDODb\PDODb;
 use PHPUnit\Framework\TestCase;
-use PDOException;
+use RuntimeException;
 
 /**
  * @group basic
@@ -118,7 +118,7 @@ class BasicTest extends TestCase {
 	}
 
 	public function testInvalidInstance() {
-		$this->expectException(PDOException::class);
+		$this->expectException(RuntimeException::class);
 		$pdodb = new PDODb;
 		$pdodb->close();
 	}
