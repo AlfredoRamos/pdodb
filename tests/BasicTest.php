@@ -96,6 +96,8 @@ class BasicTest extends TestCase {
 			$pdodb->execute();
 		}
 		$pdodb->endTransaction();
+
+		$pdodb->close();
 	}
 
 	/**
@@ -111,6 +113,12 @@ class BasicTest extends TestCase {
 		]);
 
 		$this->table = $this->pdodb->prefix . $GLOBALS['DB_TABLE'];
+	}
+
+	protected function tearDown() {
+		parent::tearDown();
+
+		$this->pdodb->close();
 	}
 
 	public function testInstance() {

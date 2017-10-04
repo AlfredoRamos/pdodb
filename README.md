@@ -2,7 +2,7 @@
 
 A simple PDO wrapper
 
-[![Build Status](https://img.shields.io/travis/AlfredoRamos/pdodb.svg?style=flat-square&maxAge=3600)](https://travis-ci.org/AlfredoRamos/pdodb) [![Latest Stable Version](https://img.shields.io/github/tag/AlfredoRamos/pdodb.svg?style=flat-square&label=stable&maxAge=3600)](https://github.com/AlfredoRamos/pdodb/releases) [![Codacy Code Quality](https://img.shields.io/codacy/grade/cf5b1c496a5e4945adf5ce02593468ee.svg?style=flat-square&maxAge=3600)](https://www.codacy.com/app/AlfredoRamos/pdodb) [![Codacy Code Coverage](https://img.shields.io/codacy/coverage/cf5b1c496a5e4945adf5ce02593468ee.svg?style=flat-square&maxAge=3600)](https://www.codacy.com/app/AlfredoRamos/pdodb) [![License](https://img.shields.io/github/license/AlfredoRamos/pdodb.svg?style=flat-square)](https://raw.githubusercontent.com/AlfredoRamos/pdodb/master/LICENSE)
+[![Build Status](https://img.shields.io/travis/AlfredoRamos/pdodb.svg?style=flat-square&maxAge=3600)](https://travis-ci.org/AlfredoRamos/pdodb) [![Latest Stable Version](https://img.shields.io/github/tag/AlfredoRamos/pdodb.svg?style=flat-square&label=stable&maxAge=3600)](https://github.com/AlfredoRamos/pdodb/releases) [![Code Quality](https://img.shields.io/codacy/grade/cf5b1c496a5e4945adf5ce02593468ee.svg?style=flat-square&maxAge=3600)](https://www.codacy.com/app/AlfredoRamos/pdodb) [![Code Coverage](https://img.shields.io/codacy/coverage/cf5b1c496a5e4945adf5ce02593468ee.svg?style=flat-square&maxAge=3600)](https://www.codacy.com/app/AlfredoRamos/pdodb) [![License](https://img.shields.io/github/license/AlfredoRamos/pdodb.svg?style=flat-square)](https://raw.githubusercontent.com/AlfredoRamos/pdodb/master/LICENSE)
 
 ### Installation
 
