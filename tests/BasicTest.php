@@ -15,6 +15,7 @@ use AlfredoRamos\PDODb\PDODb;
 use PHPUnit\Framework\TestCase;
 use RuntimeException;
 use PDOException;
+use Error;
 
 /**
  * @group basic
@@ -130,6 +131,17 @@ class BasicTest extends TestCase {
 		$this->expectException(RuntimeException::class);
 		$pdodb = new PDODb;
 		$pdodb->close();
+	}
+
+	public function testClosedConnection() {
+		$this->expectException(Error::class);
+		$this->expectExceptionMessage('Call to a member function prepare() on null');
+		$pdodb = $this->pdodb;
+		$pdodb->close();
+		$sql = 'SELECT * FROM ' . $pdodb->prefix . $this->table;
+		$pdodb->query($sql);
+		$pdodb->execute();
+		$this->assertEquals(0, $pdodb->columnCount());
 	}
 
 	public function testTableExists() {
