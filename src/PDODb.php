@@ -1,7 +1,7 @@
 <?php
 
 /**
- * A simple PDO wrapper
+ * A simple PDO wrapper.
  *
  * @author Alfredo Ramos <alfredo.ramos@yandex.com>
  * @copyright 2013 Alfredo Ramos
@@ -12,106 +12,13 @@
 namespace AlfredoRamos\PDODb;
 
 use PDO;
-use PDOException;
-use RuntimeException;
 
 class PDODb implements PDODbInterface {
 
-	/** @var \PDO $dbh */
-	private $dbh;
-
-	/** @var \PDOStatement $stmt */
-	private $stmt;
-
-	/** @var array $fetchModes */
-	private $fetchModes;
-
-	/** @var string $prefix */
-	public $prefix;
+	use PDODbTrait;
 
 	/**
-	 * Constructor.
-	 *
-	 * @param array $config
-	 *
-	 * @throws \PDOException
-	 *
-	 * @return void
-	 */
-	public function __construct($config = []) {
-		// Default options
-		$config = array_replace(
-			[
-				'driver'	=> 'mysql',
-				'host'		=> 'localhost',
-				'port'		=> 3306,
-				'database'	=> '',
-				'charset'	=> 'utf8',
-				'user'		=> '',
-				'password'	=> '',
-				'prefix'	=> '',
-				'options'	=> [
-					PDO::ATTR_EMULATE_PREPARES		=> false,
-					PDO::ATTR_ERRMODE				=> PDO::ERRMODE_EXCEPTION,
-					PDO::ATTR_DEFAULT_FETCH_MODE	=> PDO::FETCH_OBJ,
-					PDO::ATTR_PERSISTENT			=> true
-				]
-			],
-			$config
-		);
-
-		// Default PDO options
-		$config['dsn'] = vsprintf(
-			'%1$s:host=%2$s;port=%3$u;charset=%4$s;',
-			[
-				$config['driver'],
-				$config['host'],
-				$config['port'],
-				$config['charset']
-			]
-		);
-
-		// Add database to DSN if database name is not empty
-		if (!empty($config['database'])) {
-			$config['dsn'] .= sprintf('dbname=%s;', $config['database']);
-		}
-
-		// Table prefix
-		$this->prefix = $config['prefix'];
-
-		// Create a new PDO instanace
-		try {
-			$this->dbh = new PDO(
-				$config['dsn'],
-				$config['user'],
-				$config['password'],
-				$config['options']
-			);
-		} catch (PDOException $ex) {
-			// Hide stack trace that contains the password
-			throw new RuntimeException($ex->getMessage(), $ex->getCode());
-		}
-
-		// Remove configuration
-		unset($config);
-
-		// Allowed fetch modes
-		$this->fetchModes = [
-			PDO::FETCH_ASSOC,
-			PDO::FETCH_NUM,
-			PDO::FETCH_OBJ,
-			PDO::FETCH_NAMED
-		];
-	}
-
-	/**
-	 * Make a query with a prepared statement.
-	 *
-	 * @param string $sql
-	 *
-	 * @throws \PDOException
-	 *
-	 * @return \PDOStatement
+	 * {@inheritDoc}
 	 */
 	public function query($sql = '') {
 		$this->stmt = $this->dbh->prepare($sql);
@@ -120,13 +27,7 @@ class PDODb implements PDODbInterface {
 	}
 
 	/**
-	 * Bind the data.
-	 *
-	 * @param string					$param
-	 * @param string					$value
-	 * @param string|integer|bool|null	$type
-	 *
-	 * @return bool
+	 * {@inheritDoc}
 	 */
 	public function bind($param = '', $value = '', $type = null) {
 		if (is_null($type)) {
@@ -150,13 +51,7 @@ class PDODb implements PDODbInterface {
 	}
 
 	/**
-	 * Bind the data from an array.
-	 *
-	 * @see \AlfredoRamos\PDODb::bind()
-	 *
-	 * @param array $param
-	 *
-	 * @return void
+	 * {@inheritDoc}
 	 */
 	public function bindArray($param = []) {
 		array_map(
@@ -167,22 +62,14 @@ class PDODb implements PDODbInterface {
 	}
 
 	/**
-	 * Executhe the query.
-	 *
-	 * @return bool
+	 * {@inheritDoc}
 	 */
 	public function execute() {
 		return $this->stmt->execute();
 	}
 
 	/**
-	 * Get single record.
-	 *
-	 * @param integer $mode
-	 *
-	 * @throws \PDOException
-	 *
-	 * @return object|array
+	 * {@inheritDoc}
 	 */
 	public function fetch($mode = null) {
 		$this->execute();
@@ -196,13 +83,7 @@ class PDODb implements PDODbInterface {
 	}
 
 	/**
-	 * Get multiple records.
-	 *
-	 * @param integer $mode
-	 *
-	 * @throws \PDOException
-	 *
-	 * @return array
+	 * {@inheritDoc}
 	 */
 	public function fetchAll($mode = null) {
 		$this->execute();
@@ -216,11 +97,7 @@ class PDODb implements PDODbInterface {
 	}
 
 	/**
-	 * Get single field (column) by index.
-	 *
-	 * @param integer $column
-	 *
-	 * @return string|integer|float|null|bool
+	 * {@inheritDoc}
 	 */
 	public function fetchColumn($column = 0) {
 		$this->execute();
@@ -229,13 +106,7 @@ class PDODb implements PDODbInterface {
 	}
 
 	/**
-	 * Get single field (column) by name.
-	 *
-	 * @param string $name
-	 *
-	 * @throws \PDOException
-	 *
-	 * @return string|integer|float|null
+	 * {@inheritDoc}
 	 */
 	public function fetchField($name = '', $mode = null) {
 		$this->execute();
@@ -261,78 +132,56 @@ class PDODb implements PDODbInterface {
 	}
 
 	/**
-	 * Get number of affected rows.
-	 *
-	 * @return integer
+	 * {@inheritDoc}
 	 */
 	public function rowCount() {
 		return $this->stmt->rowCount();
 	}
 
 	/**
-	 * Get number of columns in the result set.
-	 *
-	 * @return integer
+	 * {@inheritDoc}
 	 */
 	public function columnCount() {
 		return $this->stmt->columnCount();
 	}
 
 	/**
-	 * Get last inserted ID.
-	 *
-	 * @return integer
+	 * {@inheritDoc}
 	 */
 	public function lastInsertId() {
 		return $this->dbh->lastInsertId();
 	}
 
 	/**
-	 * Run transaction.
-	 *
-	 * @throws \PDOException
-	 *
-	 * @return bool
+	 * {@inheritDoc}
 	 */
 	public function beginTransaction() {
 		return $this->dbh->beginTransaction();
 	}
 
 	/**
-	 * Stop transaction.
-	 *
-	 * @throws \PDOException
-	 *
-	 * @return bool
+	 * {@inheritDoc}
 	 */
 	public function endTransaction() {
 		return $this->dbh->commit();
 	}
 
 	/**
-	 * Cancel transaction.
-	 *
-	 * @throws \PDOException
-	 *
-	 * @return bool
+	 * {@inheritDoc}
 	 */
 	public function cancelTransaction() {
 		return $this->dbh->rollBack();
 	}
 
 	/**
-	 * Dumps info contained in prepared statement.
-	 *
-	 * @return void
+	 * {@inheritDoc}
 	 */
 	public function debugDumpParams() {
 		return $this->stmt->debugDumpParams();
 	}
 
 	/**
-	 * Close connection.
-	 *
-	 * @return void
+	 * {@inheritDoc}
 	 */
 	public function close() {
 		$this->stmt = null;
