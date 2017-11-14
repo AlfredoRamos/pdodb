@@ -6,13 +6,9 @@ addons:
 matrix:
   include:
     - php: 7.0
-      env: DB=mariadb
     - php: 7.1
-      env: DB=mariadb
     - php: 7.2
-      env: DB=mariadb
     - php: nightly
-      env: DB=mariadb
   allow_failures:
     - php: nightly
   fast_finish: true
