@@ -1,7 +1,7 @@
 <?php
 
 /**
- * A simple PDO wrapper
+ * A simple PDO wrapper.
  *
  * @author Alfredo Ramos <alfredo.ramos@yandex.com>
  * @copyright 2013 Alfredo Ramos
