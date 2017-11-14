@@ -141,7 +141,7 @@ class BasicTest extends TestCase {
 		$sql = 'SELECT * FROM ' . $pdodb->prefix . $this->table;
 		$pdodb->query($sql);
 		$pdodb->execute();
-		$this->assertEquals(0, $pdodb->columnCount());
+		$this->assertSame(0, $pdodb->columnCount());
 	}
 
 	public function testTableExists() {
@@ -155,14 +155,14 @@ class BasicTest extends TestCase {
 		$sql = 'SELECT * FROM ' . 'inv_' . $this->table;
 		$this->pdodb->query($sql);
 		$this->pdodb->execute();
-		$this->assertEquals(0, $this->pdodb->columnCount());
+		$this->assertSame(0, $this->pdodb->columnCount());
 	}
 
 	public function testTotalUsers() {
 		$sql = 'SELECT COUNT(id) as total_users
 			FROM ' . $this->pdodb->prefix . $this->table;
 		$this->pdodb->query($sql);
-		$this->assertEquals(5, $this->pdodb->fetchField('total_users'));
+		$this->assertSame(5, $this->pdodb->fetchField('total_users'));
 	}
 
 	public function testInsertToTable() {
@@ -176,7 +176,7 @@ class BasicTest extends TestCase {
 			':city'			=> 'Switzerland'
 		]);
 		$this->pdodb->execute();
-		$this->assertEquals(6, $this->pdodb->lastInsertId());
+		$this->assertSame('6', $this->pdodb->lastInsertId());
 	}
 
 	public function testFetchColumn() {
@@ -185,22 +185,22 @@ class BasicTest extends TestCase {
 			WHERE last_name = :last_name';
 		$this->pdodb->query($sql);
 		$this->pdodb->bind(':last_name', 'Trujillo');
-		$this->assertEquals(2, $this->pdodb->fetchColumn());
-		$this->assertEquals('Mexico', $this->pdodb->fetchColumn(1));
+		$this->assertSame(2, $this->pdodb->fetchColumn());
+		$this->assertSame('Mexico', $this->pdodb->fetchColumn(1));
 	}
 
 	public function testRowCount() {
 		$sql = 'SELECT id FROM ' . $this->pdodb->prefix . $this->table;
 		$this->pdodb->query($sql);
 		$this->pdodb->execute();
-		$this->assertEquals(6, $this->pdodb->rowCount());
+		$this->assertSame(6, $this->pdodb->rowCount());
 	}
 
 	public function testColumnCount() {
 		$sql = 'SELECT * FROM ' . $this->pdodb->prefix . $this->table;
 		$this->pdodb->query($sql);
 		$this->pdodb->execute();
-		$this->assertEquals(4, $this->pdodb->columnCount());
+		$this->assertSame(4, $this->pdodb->columnCount());
 	}
 
 }

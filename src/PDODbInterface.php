@@ -113,7 +113,7 @@ interface PDODbInterface {
 	/**
 	 * Get last inserted ID.
 	 *
-	 * @return integer
+	 * @return string
 	 */
 	public function lastInsertId();
 
@@ -157,4 +157,5 @@ interface PDODbInterface {
 	 * @return void
 	 */
 	public function close();
+
 }
