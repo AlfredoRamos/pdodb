@@ -62,7 +62,7 @@ trait PDODbTrait {
 
 		// Default PDO options
 		$config['dsn'] = vsprintf(
-			'%1$s:host=%2$s;port=%3$u;charset=%4$s;',
+			'%1$s:host=%2$s;port=%3$u;charset=%4$s',
 			[
 				$config['driver'],
 				$config['host'],
@@ -73,7 +73,13 @@ trait PDODbTrait {
 
 		// Add database to DSN if database name is not empty
 		if (!empty($config['database'])) {
-			$config['dsn'] .= sprintf('dbname=%s;', $config['database']);
+			$config['dsn'] = vsprintf(
+				'%1$s;dbname=%2$s',
+				[
+					$config['dsn'],
+					$config['database']
+				]
+			);
 		}
 
 		// Table prefix
