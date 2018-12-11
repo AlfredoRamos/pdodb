@@ -21,11 +21,10 @@ use Error;
  * @group basic
  */
 class BasicTest extends TestCase {
-
-	/** @var \AlfredoRamos\PDODb\PDODb $pdodb */
+	/** @var \AlfredoRamos\PDODb\PDODb */
 	protected $pdodb;
 
-	/** @var string $table */
+	/** @var string */
 	protected $table;
 
 	/**
@@ -107,19 +106,16 @@ class BasicTest extends TestCase {
 	 */
 	protected function setUp() {
 		parent::setUp();
-
 		$this->pdodb = new PDODb([
 			'user'		=> $GLOBALS['DB_USER'],
 			'database'	=> $GLOBALS['DB_DBNAME'],
 			'prefix'	=> $GLOBALS['DB_TPREFIX']
 		]);
-
 		$this->table = $GLOBALS['DB_TABLE'];
 	}
 
 	protected function tearDown() {
 		parent::tearDown();
-
 		$this->pdodb->close();
 	}
 
@@ -202,5 +198,4 @@ class BasicTest extends TestCase {
 		$this->pdodb->execute();
 		$this->assertSame(4, $this->pdodb->columnCount());
 	}
-
 }

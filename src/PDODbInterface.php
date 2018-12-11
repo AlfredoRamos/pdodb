@@ -12,7 +12,6 @@
 namespace AlfredoRamos\PDODb;
 
 interface PDODbInterface {
-
 	/**
 	 * Make a query with a prepared statement.
 	 *
@@ -157,5 +156,4 @@ interface PDODbInterface {
 	 * @return void
 	 */
 	public function close();
-
 }

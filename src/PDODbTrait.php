@@ -16,17 +16,16 @@ use PDOException;
 use RuntimeException;
 
 trait PDODbTrait {
-
-	/** @var \PDO $dbh */
+	/** @var \PDO */
 	private $dbh;
 
-	/** @var \PDOStatement $stmt */
+	/** @var \PDOStatement */
 	private $stmt;
 
-	/** @var array $fetchModes */
+	/** @var array */
 	private $fetchModes;
 
-	/** @var string $prefix */
+	/** @var string */
 	public $prefix;
 
 	/**
@@ -109,5 +108,4 @@ trait PDODbTrait {
 			PDO::FETCH_NAMED
 		];
 	}
-
 }

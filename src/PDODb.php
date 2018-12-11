@@ -14,7 +14,6 @@ namespace AlfredoRamos\PDODb;
 use PDO;
 
 class PDODb implements PDODbInterface {
-
 	use PDODbTrait;
 
 	/**
@@ -32,17 +31,17 @@ class PDODb implements PDODbInterface {
 	public function bind($param = '', $value = '', $type = null) {
 		if (is_null($type)) {
 			switch (true) {
-			case is_int($value):
-				$type = PDO::PARAM_INT;
+				case is_int($value):
+					$type = PDO::PARAM_INT;
 				break;
-			case is_bool($value):
-				$type = PDO::PARAM_BOOL;
+				case is_bool($value):
+					$type = PDO::PARAM_BOOL;
 				break;
-			case is_null($value):
-				$type = PDO::PARAM_NULL;
+				case is_null($value):
+					$type = PDO::PARAM_NULL;
 				break;
-			default:
-				$type = PDO::PARAM_STR;
+				default:
+					$type = PDO::PARAM_STR;
 				break;
 			}
 		}
@@ -187,5 +186,4 @@ class PDODb implements PDODbInterface {
 		$this->stmt = null;
 		$this->dbh = null;
 	}
-
 }
