@@ -3,7 +3,7 @@
 	"description": "A simple PDO wrapper",
 	"keywords": ["pdo", "wrapper"],
 	"homepage": "https://github.com/AlfredoRamos/pdodb",
-	"license": "GPL-3.0+",
+	"license": "GPL-3.0-or-later",
 	"authors": [
 		{
 			"name": "Alfredo Ramos",
