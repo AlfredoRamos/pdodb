@@ -44,20 +44,19 @@ Then run `composer install` or `composer update` on your terminal.
 
 ### Usage
 
-The constructor takes an array with all the values needed to connect to the database.
+The constructor takes an array with all the values needed to connect generate the DSN and connect to the database.
 
 ```php
 require __DIR__ . '/vendor/autoload.php';
 
-// Default configuration values
 $db = new \AlfredoRamos\PDODb\PDODb([
 	'driver'	=> 'mysql',
 	'host'		=> 'localhost',
 	'port'		=> 3306,
-	'database'	=> '',
+	'dbname'	=> 'database_name',
 	'charset'	=> 'utf-8',
-	'user'		=> '',
-	'password'	=> '',
+	'user'		=> 'database_user',
+	'password'	=> 'database_user_password',
 	'prefix'	=> '',
 	'options'	=> [
 		PDO::ATTR_EMULATE_PREPARES	=> false,
