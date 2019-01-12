@@ -4,6 +4,13 @@ A simple PDO wrapper
 
 [![Build Status](https://img.shields.io/travis/AlfredoRamos/pdodb.svg?style=flat-square)](https://travis-ci.org/AlfredoRamos/pdodb) [![Latest Stable Version](https://img.shields.io/github/tag/AlfredoRamos/pdodb.svg?style=flat-square&label=stable)](https://github.com/AlfredoRamos/pdodb/releases) [![Code Quality](https://img.shields.io/codacy/grade/cf5b1c496a5e4945adf5ce02593468ee.svg?style=flat-square)](https://www.codacy.com/app/AlfredoRamos/pdodb) [![Code Coverage](https://img.shields.io/codacy/coverage/cf5b1c496a5e4945adf5ce02593468ee.svg?style=flat-square)](https://www.codacy.com/app/AlfredoRamos/pdodb) [![License](https://img.shields.io/github/license/AlfredoRamos/pdodb.svg?style=flat-square)](https://raw.githubusercontent.com/AlfredoRamos/pdodb/master/LICENSE)
 
+### PDO Drivers
+
+Currently it has only been used and tested with:
+
+- MySQL
+- PostgreSQL
+
 ### Installation
 
 Open your `composer.json` file and add this repository in your `repositories` array ([repositories#vcs](https://getcomposer.org/doc/05-repositories.md#vcs)):

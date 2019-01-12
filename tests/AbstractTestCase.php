@@ -17,60 +17,23 @@ use RuntimeException;
 use PDOException;
 use Error;
 
-/**
- * @group basic
- */
-class BasicTest extends TestCase {
+abstract class AbstractTestCase extends TestCase {
 	/** @var \AlfredoRamos\PDODb\PDODb */
 	protected $pdodb;
 
 	/** @var string */
 	protected $table;
 
-	/**
-	 * @backupGlobals enabled
-	 */
-	public static function setUpBeforeClass() {
-		// Database instance
-		$pdodb = new PDODb([
-			'user'		=> $GLOBALS['DB_USER'],
-			'prefix'	=> $GLOBALS['DB_TPREFIX']
-		]);
+	protected function setUp() {
+		parent::setUp();
+		$this->table = $GLOBALS['DB_TABLE'];
+	}
 
-		// Drop database
-		$sql = 'DROP DATABASE IF EXISTS ' . $GLOBALS['DB_DBNAME'];
-		$pdodb->query($sql);
-		$pdodb->execute();
+	public function testInstance() {
+		$this->assertInstanceOf(PDODb::class, $this->pdodb);
+	}
 
-		// Create database
-		$sql = 'CREATE DATABASE IF NOT EXISTS ' . $GLOBALS['DB_DBNAME'];
-		$pdodb->query($sql);
-		$pdodb->execute();
-
-		// Drop test table
-		$sql = 'DROP TABLE IF EXISTS ' . vsprintf('%1$s.%2$s%3$s', [
-			$GLOBALS['DB_DBNAME'],
-			$pdodb->prefix,
-			$GLOBALS['DB_TABLE']
-		]);
-		$pdodb->query($sql);
-		$pdodb->execute();
-
-		// Create test table
-		$sql = 'CREATE TABLE IF NOT EXISTS ' . vsprintf('%1$s.%2$s%3$s', [
-			$GLOBALS['DB_DBNAME'],
-			$pdodb->prefix,
-			$GLOBALS['DB_TABLE']
-		]) . ' (
-			id int(11) NOT NULL AUTO_INCREMENT,
-			first_name varchar(50) COLLATE utf8_unicode_ci NOT NULL,
-			last_name varchar(50) COLLATE utf8_unicode_ci NOT NULL,
-			city varchar(50) COLLATE utf8_unicode_ci NOT NULL,
-			PRIMARY KEY (`id`)
-		) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci';
-		$pdodb->query($sql);
-		$pdodb->execute();
-
+	public function testInsertInitialData() {
 		// Insert initial data
 		$users = [
 			['Maria', 'Anders', 'Germany'],
@@ -79,48 +42,21 @@ class BasicTest extends TestCase {
 			['Patricia', 'McKenna', 'Ireland'],
 			['Frédérique', 'Citeaux', 'France']
 		];
-		$sql = 'INSERT INTO ' . vsprintf('%1$s.%2$s%3$s', [
-			$GLOBALS['DB_DBNAME'],
-			$pdodb->prefix,
-			$GLOBALS['DB_TABLE']
-		]) . ' (first_name, last_name, city)
+		$sql = 'INSERT INTO ' . $this->pdodb->prefix . $this->table . '
+			(first_name, last_name, city)
 			VALUES (:first_name, :last_name, :city)';
-		$pdodb->query($sql);
+		$this->pdodb->query($sql);
 
-		$pdodb->beginTransaction();
+		$this->pdodb->beginTransaction();
 		foreach ($users as $user) {
-			$pdodb->bindArray([
+			$this->pdodb->bindArray([
 				':first_name'	=> $user[0],
 				':last_name'	=> $user[1],
 				':city'			=> $user[2]
 			]);
-			$pdodb->execute();
+			$this->pdodb->execute();
 		}
-		$pdodb->endTransaction();
-
-		$pdodb->close();
-	}
-
-	/**
-	 * @backupGlobals enabled
-	 */
-	protected function setUp() {
-		parent::setUp();
-		$this->pdodb = new PDODb([
-			'user'		=> $GLOBALS['DB_USER'],
-			'database'	=> $GLOBALS['DB_DBNAME'],
-			'prefix'	=> $GLOBALS['DB_TPREFIX']
-		]);
-		$this->table = $GLOBALS['DB_TABLE'];
-	}
-
-	protected function tearDown() {
-		parent::tearDown();
-		$this->pdodb->close();
-	}
-
-	public function testInstance() {
-		$this->assertInstanceOf(PDODb::class, $this->pdodb);
+		$this->assertTrue($this->pdodb->endTransaction());
 	}
 
 	public function testFailedConnection() {
@@ -138,12 +74,6 @@ class BasicTest extends TestCase {
 		$pdodb->query($sql);
 		$pdodb->execute();
 		$this->assertSame(0, $pdodb->columnCount());
-	}
-
-	public function testTableExists() {
-		$sql = 'SHOW TABLES LIKE "' . $this->pdodb->prefix . $this->table . '"';
-		$this->pdodb->query($sql);
-		$this->assertFalse(empty($this->pdodb->fetch()));
 	}
 
 	public function testWrongTablePrefix() {

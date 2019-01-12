@@ -13,13 +13,16 @@
 	syntaxCheck="true"
 	verbose="true">
 	<testsuites>
-		<testsuite name="Package Test Suite">
-			<directory suffix="Test.php">./tests/</directory>
+		<testsuite name="MySQL">
+			<directory suffix="MySQLTest.php">./tests/</directory>
+		</testsuite>
+		<testsuite name="PostgreSQL">
+			<directory suffix="PostgreSQLTest.php">./tests/</directory>
 		</testsuite>
 	</testsuites>
 	<php>
 		<var name="DB_USER" value="travis" />
-		<var name="DB_DBNAME" value="test_db" />
+		<var name="DB_NAME" value="test_db" />
 		<var name="DB_TABLE" value="users" />
 		<var name="DB_TPREFIX" value="t_" />
 	</php>

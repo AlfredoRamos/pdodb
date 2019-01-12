@@ -41,11 +41,7 @@ trait PDODbTrait {
 		// Default options
 		$config = array_replace(
 			[
-				'driver'	=> 'mysql',
-				'host'		=> 'localhost',
-				'port'		=> 3306,
-				'database'	=> '',
-				'charset'	=> 'utf8',
+				'driver'	=> '',
 				'user'		=> '',
 				'password'	=> '',
 				'prefix'	=> '',
@@ -59,27 +55,38 @@ trait PDODbTrait {
 			$config
 		);
 
-		// Default PDO options
-		$config['dsn'] = vsprintf(
-			'%1$s:host=%2$s;port=%3$u;charset=%4$s',
-			[
-				$config['driver'],
-				$config['host'],
-				$config['port'],
-				$config['charset']
-			]
-		);
+		// DSN helper
+		$config['dsn'] = [];
 
-		// Add database to DSN if database name is not empty
-		if (!empty($config['database'])) {
-			$config['dsn'] = vsprintf(
-				'%1$s;dbname=%2$s',
-				[
-					$config['dsn'],
-					$config['database']
-				]
-			);
+		// Configuration keys not needed in DSN
+		$unneeded = [
+			// Directly pased to the PDO constructor
+			'user', 'password',
+			// Will be used later
+			'driver', 'options',
+			// Table helper
+			'prefix',
+			// Will be generated later
+			'dsn'
+		];
+
+		// Generate DNS
+		foreach ($config as $key => $value) {
+			if (in_array($key, $unneeded, true) || empty($value)) {
+				continue;
+			}
+
+			$config['dsn'][$key] = $value;
 		}
+
+		// Sanitize DNS
+		$this->sanitizeDsn($config['dsn']);
+
+		// DSN string
+		$config['dsn'] = vsprintf('%1$s:%2$s', [
+			$config['driver'],
+			http_build_query($config['dsn'], '', ';')
+		]);
 
 		// Table prefix
 		$this->prefix = $config['prefix'];
@@ -107,5 +114,32 @@ trait PDODbTrait {
 			PDO::FETCH_OBJ,
 			PDO::FETCH_NAMED
 		];
+	}
+
+	/**
+	 * Remove unknown DSN properties.
+	 *
+	 * @param array $dsn
+	 *
+	 * @return void
+	 */
+	private function sanitizeDsn(&$dsn = []) {
+		if (empty($dsn)) {
+			return;
+		}
+
+		$valid = [
+			'host', 'port', 'dbname',
+			'unix_socket', 'charset'
+		];
+
+		// Remove invalid DSN keys
+		foreach ($dsn as $key => $value) {
+			if (in_array($key, $valid, true)) {
+				continue;
+			}
+
+			unset($dsn[$key]);
+		}
 	}
 }

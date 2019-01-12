@@ -1,20 +1,6 @@
 language: php
 dist: xenial
 
-addons:
-  mariadb: 10.2
-
-matrix:
-  include:
-    - php: 7.0
-    - php: 7.1
-    - php: 7.2
-    - php: 7.3
-    - php: nightly
-  allow_failures:
-    - php: nightly
-  fast_finish: true
-
 branches:
   only:
     - master
@@ -24,11 +10,63 @@ cache:
   directories:
     - $HOME/.composer/cache/files
 
+matrix:
+  include:
+    - php: 7.0
+      addons:
+        mariadb: 10.2
+      env: DB=mariadb
+    - php: 7.0
+      addons:
+        postgresql: 10
+      env: DB=postgresql
+    - php: 7.1
+      addons:
+        mariadb: 10.2
+      env: DB=mariadb
+    - php: 7.1
+      addons:
+        postgresql: 10
+      env: DB=postgresql
+    - php: 7.2
+      addons:
+        mariadb: 10.2
+      env: DB=mariadb
+    - php: 7.2
+      addons:
+        postgresql: 10
+      env: DB=postgresql
+    - php: 7.3
+      addons:
+        mariadb: 10.2
+      env: DB=mariadb
+    - php: 7.3
+      addons:
+        postgresql: 10
+      env: DB=postgresql
+    - php: nightly
+      addons:
+        mariadb: 10.2
+      env: DB=mariadb
+    - php: nightly
+      addons:
+        postgresql: 10
+      env: DB=postgresql
+  allow_failures:
+    - php: nightly
+  fast_finish: true
+
+before_install:
+  - chmod +x travis/*.sh
+
 install:
-  - travis_retry composer install --prefer-dist --no-interaction
+  - source travis/install.sh
+
+before_script:
+  - source travis/before_script.sh
 
 script:
-  - vendor/bin/phpunit
+  - source travis/script.sh
 
 after_success:
-  - vendor/bin/codacycoverage clover
+  - source travis/after_success.sh
