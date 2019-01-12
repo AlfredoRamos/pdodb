@@ -12,10 +12,6 @@
 namespace AlfredoRamos\Tests;
 
 use AlfredoRamos\PDODb\PDODb;
-use PHPUnit\Framework\TestCase;
-use RuntimeException;
-use PDOException;
-use Error;
 
 /**
  * @group basic
