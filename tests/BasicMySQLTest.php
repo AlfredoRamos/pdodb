@@ -24,9 +24,9 @@ class BasicMySQLTest extends AbstractTestCase {
 		parent::setUp();
 		$this->pdodb = new PDODb([
 			'driver'	=> 'mysql',
-			'host'		=> 'localhost',
-			'port'		=> 3306,
-			'user'		=> $GLOBALS['DB_USER'],
+			'host'		=> $GLOBALS['DB_HOST'],
+			'port'		=> (int) $GLOBALS['MYSQL_PORT'],
+			'user'		=> $GLOBALS['MYSQL_USER'],
 			'dbname'	=> $GLOBALS['DB_NAME'],
 			'charset'	=> 'utf8',
 			'prefix'	=> $GLOBALS['DB_TPREFIX']

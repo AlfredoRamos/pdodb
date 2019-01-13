@@ -24,9 +24,9 @@ class BasicPostgreSQLTest extends AbstractTestCase {
 		parent::setUp();
 		$this->pdodb = new PDODb([
 			'driver'	=> 'pgsql',
-			'host'		=> 'localhost',
-			'port'		=> 5432,
-			'user'		=> 'postgres',
+			'host'		=> $GLOBALS['DB_HOST'],
+			'port'		=> (int) $GLOBALS['PGSQL_PORT'],
+			'user'		=> $GLOBALS['PGSQL_USER'],
 			'dbname'	=> $GLOBALS['DB_NAME'],
 			'prefix'	=> $GLOBALS['DB_TPREFIX']
 		]);
