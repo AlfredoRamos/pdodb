@@ -42,6 +42,9 @@ trait PDODbTrait {
 		$config = array_replace(
 			[
 				'driver'	=> '',
+				'host'		=> '',
+				'port'		=> 0,
+				'dbname'	=> '',
 				'user'		=> '',
 				'password'	=> '',
 				'prefix'	=> '',
