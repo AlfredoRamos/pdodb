@@ -44,6 +44,14 @@ matrix:
       addons:
         postgresql: 10
       env: DB=postgresql
+    - php: 7.4
+      addons:
+        mariadb: 10.2
+      env: DB=mariadb
+    - php: 7.4
+      addons:
+        postgresql: 10
+      env: DB=postgresql
     - php: nightly
       addons:
         mariadb: 10.2
