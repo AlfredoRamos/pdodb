@@ -4,6 +4,7 @@ A simple PDO wrapper
 
 [![Build Status](https://img.shields.io/travis/com/AlfredoRamos/pdodb.svg?style=flat-square)](https://travis-ci.org/AlfredoRamos/pdodb)
 [![Latest Stable Version](https://img.shields.io/github/tag/AlfredoRamos/pdodb.svg?style=flat-square&label=stable)](https://github.com/AlfredoRamos/pdodb/releases)
+[![Code Quality](https://img.shields.io/codefactor/grade/github/AlfredoRamos/pdodb.svg?style=flat-square)](https://www.codefactor.io/repository/github/alfredoramos/pdodb)
 [![License](https://img.shields.io/github/license/AlfredoRamos/pdodb.svg?style=flat-square)](https://raw.githubusercontent.com/AlfredoRamos/pdodb/master/LICENSE)
 
 ### PDO Drivers
