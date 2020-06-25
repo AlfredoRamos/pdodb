@@ -2,7 +2,7 @@
 
 A simple PDO wrapper
 
-[![Build Status](https://img.shields.io/travis/com/AlfredoRamos/pdodb.svg?style=flat-square)](https://travis-ci.org/AlfredoRamos/pdodb)
+[![Build Status](https://img.shields.io/travis/com/AlfredoRamos/pdodb.svg?style=flat-square)](https://travis-ci.com/AlfredoRamos/pdodb)
 [![Latest Stable Version](https://img.shields.io/github/tag/AlfredoRamos/pdodb.svg?style=flat-square&label=stable)](https://github.com/AlfredoRamos/pdodb/releases)
 [![Code Quality](https://img.shields.io/codacy/grade/587b5f5a3b534cb8aec7c3a7cffe6707.svg?style=flat-square)](https://app.codacy.com/manual/AlfredoRamos/pdodb/dashboard)
 [![License](https://img.shields.io/github/license/AlfredoRamos/pdodb.svg?style=flat-square)](https://raw.githubusercontent.com/AlfredoRamos/pdodb/master/LICENSE)
