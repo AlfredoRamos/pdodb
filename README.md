@@ -11,7 +11,7 @@ A simple PDO wrapper
 
 Currently it has only been used and tested with:
 
-- MySQL
+- MySQL/MariaDB
 - PostgreSQL
 
 ### Installation
@@ -34,7 +34,7 @@ Add the following line in the `require` object:
 **Stable version**
 
 ```json
-"alfredo-ramos/pdodb": "~2.0.0"
+"alfredo-ramos/pdodb": "^2.1.0"
 ```
 
 **Development version**
