@@ -1,5 +1,5 @@
 language: php
-dist: xenial
+dist: bionic
 
 branches:
   only:
@@ -10,55 +10,79 @@ cache:
   directories:
     - $HOME/.composer/cache/files
 
-matrix:
+jobs:
   include:
-    - php: 7.0
+    - os: linux
+      dist: xenial
+      php: 7.0
+      services: mysql
+      env: DB=mysql
+    - os: linux
+      dist: xenial
+      php: 7.0
       addons:
         mariadb: 10.2
       env: DB=mariadb
-    - php: 7.0
+    - os: linux
+      dist: xenial
+      php: 7.0
       addons:
         postgresql: 10
       env: DB=postgresql
     - php: 7.1
+      services: mysql
+      env: DB=mysql
+    - php: 7.1
       addons:
-        mariadb: 10.2
+        mariadb: 10.3
       env: DB=mariadb
     - php: 7.1
       addons:
-        postgresql: 10
+        postgresql: 11
       env: DB=postgresql
     - php: 7.2
+      services: mysql
+      env: DB=mysql
+    - php: 7.2
       addons:
-        mariadb: 10.2
+        mariadb: 10.3
       env: DB=mariadb
     - php: 7.2
       addons:
-        postgresql: 10
+        postgresql: 11
       env: DB=postgresql
     - php: 7.3
+      services: mysql
+      env: DB=mysql
+    - php: 7.3
       addons:
-        mariadb: 10.2
+        mariadb: 10.3
       env: DB=mariadb
     - php: 7.3
       addons:
-        postgresql: 10
+        postgresql: 11
       env: DB=postgresql
     - php: 7.4
+      services: mysql
+      env: DB=mysql
+    - php: 7.4
       addons:
-        mariadb: 10.2
+        mariadb: 10.3
       env: DB=mariadb
     - php: 7.4
       addons:
-        postgresql: 10
+        postgresql: 11
       env: DB=postgresql
     - php: nightly
+      services: mysql
+      env: DB=mysql
+    - php: nightly
       addons:
-        mariadb: 10.2
+        mariadb: 10.3
       env: DB=mariadb
     - php: nightly
       addons:
-        postgresql: 10
+        postgresql: 11
       env: DB=postgresql
   allow_failures:
     - php: nightly
