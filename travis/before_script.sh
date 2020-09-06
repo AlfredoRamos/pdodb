@@ -9,6 +9,6 @@ case "${DB}" in
 		mysql -u root < travis/data/fix_permissions.sql
 		;;
 	postgresql)
-		psql < travis/data/test_db_postgresql.sql
+		psql -U postgres < travis/data/test_db_postgresql.sql
 		;;
 esac
