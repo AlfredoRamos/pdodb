@@ -62,27 +62,37 @@ jobs:
       addons:
         postgresql: 11
       env: DB=postgresql
-    - php: 7.4
+    - os: linux
+      dist: focal
+      php: 7.4
       services: mysql
       env: DB=mysql
-    - php: 7.4
+    - os: linux
+      dist: focal
+      php: 7.4
       addons:
         mariadb: 10.3
       env: DB=mariadb
+    # TODO: Use Ubuntu Focal Fossa
     - php: 7.4
       addons:
         postgresql: 11
       env: DB=postgresql
-    - php: nightly
+    - os: linux
+      dist: focal
+      php: nightly
       services: mysql
       env: DB=mysql
-    - php: nightly
+    - os: linux
+      dist: focal
+      php: nightly
       addons:
         mariadb: 10.3
       env: DB=mariadb
-    - php: nightly
-      addons:
-        postgresql: 11
+    - os: linux
+      dist: focal
+      php: nightly
+      services: postgresql
       env: DB=postgresql
   allow_failures:
     - php: nightly
