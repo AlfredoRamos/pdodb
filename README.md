@@ -34,7 +34,7 @@ Add the following line in the `require` object:
 **Stable version**
 
 ```json
-"alfredo-ramos/pdodb": "^2.1.0"
+"alfredo-ramos/pdodb": "^2.2.0"
 ```
 
 **Development version**
