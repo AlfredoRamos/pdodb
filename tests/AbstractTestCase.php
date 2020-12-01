@@ -24,7 +24,7 @@ abstract class AbstractTestCase extends TestCase {
 	/** @var string */
 	protected $table;
 
-	protected function setUp() {
+	protected function setUp(): void {
 		parent::setUp();
 		$this->table = $GLOBALS['DB_TABLE'];
 	}

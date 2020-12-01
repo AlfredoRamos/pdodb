@@ -20,7 +20,7 @@ class BasicMySQLTest extends AbstractTestCase {
 	/**
 	 * @backupGlobals enabled
 	 */
-	protected function setUp() {
+	protected function setUp(): void {
 		parent::setUp();
 		$this->pdodb = new PDODb([
 			'driver'	=> 'mysql',

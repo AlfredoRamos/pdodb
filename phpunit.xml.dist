@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <phpunit
+	xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.3/phpunit.xsd"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	backupGlobals="false"
 	backupStaticAttributes="false"
 	bootstrap="vendor/autoload.php"
@@ -10,7 +12,6 @@
 	processIsolation="false"
 	stopOnError="false"
 	stopOnFailure="false"
-	syntaxCheck="true"
 	verbose="true">
 	<testsuites>
 		<testsuite name="MySQL">
@@ -21,23 +22,21 @@
 		</testsuite>
 	</testsuites>
 	<php>
-		<var name="DB_HOST" value="localhost" />
-		<var name="DB_NAME" value="test_db" />
-		<var name="DB_TABLE" value="users" />
-		<var name="DB_TPREFIX" value="t_" />
-
-		<var name="MYSQL_PORT" value="3306" />
-		<var name="MYSQL_USER" value="travis" />
-
-		<var name="PGSQL_PORT" value="5432" />
-		<var name="PGSQL_USER" value="postgres" />
+		<var name="DB_HOST" value="localhost"/>
+		<var name="DB_NAME" value="test_db"/>
+		<var name="DB_TABLE" value="users"/>
+		<var name="DB_TPREFIX" value="t_"/>
+		<var name="MYSQL_PORT" value="3306"/>
+		<var name="MYSQL_USER" value="travis"/>
+		<var name="PGSQL_PORT" value="5432"/>
+		<var name="PGSQL_USER" value="postgres"/>
 	</php>
-	<filter>
-		<whitelist processUncoveredFilesFromWhitelist="true">
+	<coverage processUncoveredFiles="true">
+		<include>
 			<directory suffix=".php">./src/</directory>
-		</whitelist>
-	</filter>
-	<logging>
-		<log type="coverage-clover" target="./build/logs/clover.xml" />
-	</logging>
+		</include>
+		<report>
+			<clover outputFile="./build/logs/clover.xml"/>
+		</report>
+	</coverage>
 </phpunit>

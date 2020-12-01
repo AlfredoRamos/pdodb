@@ -1,5 +1,5 @@
 language: php
-dist: bionic
+dist: focal
 
 branches:
   only:
@@ -13,86 +13,77 @@ cache:
 jobs:
   include:
     - os: linux
-      dist: xenial
-      php: 7.0
+      dist: bionic
+      php: 7.2
       services: mysql
       env: DB=mysql
     - os: linux
-      dist: xenial
-      php: 7.0
+      dist: bionic
+      php: 7.2
       addons:
-        mariadb: 10.2
+        mariadb: 10.3
       env: DB=mariadb
     - os: linux
-      dist: xenial
-      php: 7.0
-      addons:
-        postgresql: 10
-      env: DB=postgresql
-    - php: 7.1
-      services: mysql
-      env: DB=mysql
-    - php: 7.1
-      addons:
-        mariadb: 10.3
-      env: DB=mariadb
-    - php: 7.1
-      addons:
-        postgresql: 11
-      env: DB=postgresql
-    - php: 7.2
-      services: mysql
-      env: DB=mysql
-    - php: 7.2
-      addons:
-        mariadb: 10.3
-      env: DB=mariadb
-    - php: 7.2
-      addons:
-        postgresql: 11
-      env: DB=postgresql
-    - php: 7.3
-      services: mysql
-      env: DB=mysql
-    - php: 7.3
-      addons:
-        mariadb: 10.3
-      env: DB=mariadb
-    - php: 7.3
+      dist: bionic
+      php: 7.2
       addons:
         postgresql: 11
       env: DB=postgresql
     - os: linux
-      dist: focal
-      php: 7.4
+      dist: bionic
+      php: 7.3
       services: mysql
       env: DB=mysql
     - os: linux
-      dist: focal
-      php: 7.4
+      dist: bionic
+      php: 7.3
       addons:
         mariadb: 10.3
       env: DB=mariadb
-    # TODO: Use Ubuntu Focal Fossa
+    - os: linux
+      dist: bionic
+      php: 7.3
+      addons:
+        postgresql: 11
+      env: DB=postgresql
+    - php: 7.4
+      services: mysql
+      env: DB=mysql
     - php: 7.4
       addons:
+        mariadb: 10.3
+      env: DB=mariadb
+    - os: linux
+      dist: bionic
+      php: 7.4
+      addons:
         postgresql: 11
       env: DB=postgresql
-    - os: linux
-      dist: focal
-      php: nightly
+    - php: 8.0snapshot
       services: mysql
       env: DB=mysql
-    - os: linux
-      dist: focal
-      php: nightly
+    - php: 8.0snapshot
       addons:
         mariadb: 10.3
       env: DB=mariadb
     - os: linux
-      dist: focal
+      dist: bionic
+      php: 8.0snapshot
+      addons:
+        postgresql: 11
+      env: DB=postgresql
+    - php: nightly
+      services: mysql
+      env: DB=mysql
+    - php: nightly
+      addons:
+        mariadb: 10.3
+      env: DB=mariadb
+    - os: linux
+      dist: bionic
       php: nightly
-      services: postgresql
+      addons:
+        postgresql: 11
       env: DB=postgresql
   allow_failures:
     - php: nightly
