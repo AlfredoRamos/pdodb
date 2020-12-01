@@ -3,4 +3,4 @@
 set -e
 
 # Install composer dependencies
-travis_retry composer install --prefer-dist --no-interaction
+travis_retry composer update --prefer-dist --no-interaction
