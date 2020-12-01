@@ -52,6 +52,22 @@ jobs:
       env: DB=postgresql
     - os: linux
       dist: focal
+      php: 8.0snapshot
+      services: mysql
+      env: DB=mysql
+    - os: linux
+      dist: focal
+      php: 8.0snapshot
+      addons:
+        mariadb: 10.3
+      env: DB=mariadb
+    - os: linux
+      php: 8.0snapshot
+      addons:
+        postgresql: 11
+      env: DB=postgresql
+    - os: linux
+      dist: focal
       php: nightly
       services: mysql
       env: DB=mysql
@@ -62,9 +78,9 @@ jobs:
         mariadb: 10.3
       env: DB=mariadb
     - os: linux
-      dist: focal
       php: nightly
-      services: postgresql
+      addons:
+        postgresql: 11
       env: DB=postgresql
   allow_failures:
     - php: nightly
