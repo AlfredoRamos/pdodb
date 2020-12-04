@@ -1,3 +1,3 @@
-CREATE USER IF NOT EXISTS travis@localhost;
-GRANT ALL ON *.* TO travis@localhost;
+CREATE USER IF NOT EXISTS 'mysql'@'%';
+GRANT ALL ON *.* TO 'mysql'@'%';
 FLUSH PRIVILEGES;

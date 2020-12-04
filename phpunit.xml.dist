@@ -22,12 +22,12 @@
 		</testsuite>
 	</testsuites>
 	<php>
-		<var name="DB_HOST" value="localhost"/>
+		<var name="DB_HOST" value="127.0.0.1"/>
 		<var name="DB_NAME" value="test_db"/>
 		<var name="DB_TABLE" value="users"/>
 		<var name="DB_TPREFIX" value="t_"/>
 		<var name="MYSQL_PORT" value="3306"/>
-		<var name="MYSQL_USER" value="travis"/>
+		<var name="MYSQL_USER" value="mysql"/>
 		<var name="PGSQL_PORT" value="5432"/>
 		<var name="PGSQL_USER" value="postgres"/>
 	</php>
