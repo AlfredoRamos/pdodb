@@ -30,6 +30,7 @@
 		<var name="MYSQL_USER" value="mysql"/>
 		<var name="PGSQL_PORT" value="5432"/>
 		<var name="PGSQL_USER" value="postgres"/>
+		<var name="PGSQL_PASS" value="postgres"/>
 	</php>
 	<coverage processUncoveredFiles="true">
 		<include>

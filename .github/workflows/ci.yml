@@ -11,8 +11,8 @@ on:
       - reopened
 
 jobs:
-  mariadb-tests:
-    name: MariaDB ${{ matrix.mariadb-version }}, PHP ${{ matrix.php-version }} tests
+  test:
+    name: PHP ${{ matrix.php-version }} tests
     runs-on: ubuntu-latest
     services:
       mariadb:
@@ -24,11 +24,31 @@ jobs:
           MYSQL_ALLOW_EMPTY_PASSWORD: yes
         ports:
           - 3306:3306
-        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
+        options: >-
+          --health-cmd="mysqladmin ping"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=3
+      postgresql:
+        image: postgres:${{ matrix.postgresql-version }}-alpine
+        credentials:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd="pg_isready"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=3
     strategy:
       matrix:
         php-version: [7.2, 7.3, 7.4, 8.0]
         mariadb-version: [10.5]
+        postgresql-version: [13]
     steps:
       - name: Checkout sources
         uses: actions/checkout@master
@@ -53,9 +73,14 @@ jobs:
             ${{ runner.os }}-composer-
       - name: Install dependencies
         run: composer update --prefer-dist
-      - name: Setup database
+      - name: Setup databases
+        env:
+          PGPASSWORD: postgres
         run: |
           mysql -h 127.0.0.1 -u root < travis/data/test_db_mysql.sql
           mysql -h 127.0.0.1 -u root < travis/data/fix_permissions.sql
-      - name: Test PHP
+          psql -h 127.0.0.1 -U postgres -w < travis/data/test_db_postgresql.sql
+      - name: MariaDB ${{ matrix.mariadb-version }} tests
         run: vendor/bin/phpunit --testsuite "MySQL"
+      - name: PostgreSQL ${{ matrix.postgresql-version }} tests
+        run: vendor/bin/phpunit --testsuite "PostgreSQL"
