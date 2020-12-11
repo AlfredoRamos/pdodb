@@ -1,0 +1,87 @@
+name: GitHub Actions CI
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    types:
+      - opened
+      - synchronize
+      - reopened
+
+jobs:
+  test:
+    name: PHP ${{ matrix.php-version }}
+    runs-on: ubuntu-latest
+    services:
+      mariadb:
+        image: mariadb:${{ matrix.mariadb-version }}
+        credentials:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+        env:
+          MYSQL_ALLOW_EMPTY_PASSWORD: yes
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=3
+      postgresql:
+        image: postgres:${{ matrix.postgresql-version }}-alpine
+        credentials:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd="pg_isready"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=3
+    strategy:
+      matrix:
+        php-version: [7.2, 7.3, 7.4, 8.0]
+        mariadb-version: [10.5]
+        postgresql-version: [13]
+    steps:
+      - name: Checkout sources
+        uses: actions/checkout@master
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php-version }}
+          extensions: sodium, pdo, pdo_mysql
+          tools: composer:v2
+          coverage: none
+      - name: Setup Composer
+        id: setup-composer
+        run: |
+          echo "::set-output name=dir::$(composer config cache-files-dir)"
+          composer update --no-install --prefer-dist
+      - name: Setup cache
+        uses: actions/cache@v2
+        with:
+          path: ${{ steps.setup-composer.outputs.dir }}
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock', '**/composer.json') }}
+          restore-keys: |
+            ${{ runner.os }}-composer-
+      - name: Install dependencies
+        run: composer update --prefer-dist
+      - name: Setup databases
+        working-directory: .github/workflows/sql
+        env:
+          PGPASSWORD: postgres
+        run: |
+          mysql -h 127.0.0.1 -u root < test_db_mysql.sql
+          mysql -h 127.0.0.1 -u root < fix_permissions_mysql.sql
+          psql -h 127.0.0.1 -U postgres -w < test_db_postgresql.sql
+      - name: MariaDB ${{ matrix.mariadb-version }} tests
+        run: vendor/bin/phpunit --testsuite "MySQL"
+      - name: PostgreSQL ${{ matrix.postgresql-version }} tests
+        run: vendor/bin/phpunit --testsuite "PostgreSQL"
