@@ -74,12 +74,13 @@ jobs:
       - name: Install dependencies
         run: composer update --prefer-dist
       - name: Setup databases
+        working-directory: .github/workflows/sql
         env:
           PGPASSWORD: postgres
         run: |
-          mysql -h 127.0.0.1 -u root < travis/data/test_db_mysql.sql
-          mysql -h 127.0.0.1 -u root < travis/data/fix_permissions.sql
-          psql -h 127.0.0.1 -U postgres -w < travis/data/test_db_postgresql.sql
+          mysql -h 127.0.0.1 -u root < test_db_mysql.sql
+          mysql -h 127.0.0.1 -u root < fix_permissions_mysql.sql
+          psql -h 127.0.0.1 -U postgres -w < test_db_postgresql.sql
       - name: MariaDB ${{ matrix.mariadb-version }} tests
         run: vendor/bin/phpunit --testsuite "MySQL"
       - name: PostgreSQL ${{ matrix.postgresql-version }} tests
