@@ -27,10 +27,9 @@
 		<var name="DB_TABLE" value="users"/>
 		<var name="DB_TPREFIX" value="t_"/>
 		<var name="MYSQL_PORT" value="3306"/>
-		<var name="MYSQL_USER" value="mysql"/>
+		<var name="MYSQL_USER" value="root"/>
 		<var name="PGSQL_PORT" value="5432"/>
 		<var name="PGSQL_USER" value="postgres"/>
-		<var name="PGSQL_PASS" value="postgres"/>
 	</php>
 	<coverage processUncoveredFiles="true">
 		<include>
