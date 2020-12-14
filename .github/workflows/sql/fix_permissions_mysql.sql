@@ -1,3 +1,0 @@
-CREATE USER IF NOT EXISTS 'mysql'@'%';
-GRANT ALL ON *.* TO 'mysql'@'%';
-FLUSH PRIVILEGES;

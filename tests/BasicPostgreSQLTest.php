@@ -27,7 +27,6 @@ class BasicPostgreSQLTest extends AbstractTestCase {
 			'host'		=> $GLOBALS['DB_HOST'],
 			'port'		=> (int) $GLOBALS['PGSQL_PORT'],
 			'user'		=> $GLOBALS['PGSQL_USER'],
-			'password'	=> $GLOBALS['PGSQL_PASS'],
 			'dbname'	=> $GLOBALS['DB_NAME'],
 			'prefix'	=> $GLOBALS['DB_TPREFIX']
 		]);
