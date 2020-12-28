@@ -30,6 +30,7 @@ jobs:
           --health-interval=10s
           --health-timeout=5s
           --health-retries=3
+
       postgresql:
         image: postgres:${{ matrix.postgresql-version }}-alpine
         credentials:
@@ -49,27 +50,28 @@ jobs:
           --health-retries=3
     strategy:
       matrix:
-        php-version: [7.2, 7.3, 7.4, 8.0]
+        php-version: ['7.2', '7.3', '7.4', '8.0']
         database-type: [mariadb, postgresql]
-        mariadb-version: [10.5]
-        postgresql-version: [13]
+        mariadb-version: ['10.5']
+        postgresql-version: ['13.1']
     env:
       DB: ${{ matrix.database-type }}
     steps:
       - name: Checkout sources
         uses: actions/checkout@master
+
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php-version }}
           extensions: sodium, pdo, pdo_mysql
           tools: composer:v2
-          coverage: none
+          coverage: pcov
+
       - name: Setup Composer
         id: setup-composer
-        run: |
-          echo "::set-output name=dir::$(composer config cache-files-dir)"
-          composer update --no-install --prefer-dist
+        run: echo "::set-output name=dir::$(composer config cache-files-dir)"
+
       - name: Setup cache
         uses: actions/cache@v2
         with:
@@ -77,8 +79,10 @@ jobs:
           key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock', '**/composer.json') }}
           restore-keys: |
             ${{ runner.os }}-composer-
+
       - name: Install dependencies
-        run: composer update --prefer-dist
+        run: composer update -n --prefer-dist --no-progress
+
       - name: Setup database
         working-directory: .github/workflows/sql
         run: |
@@ -89,6 +93,7 @@ jobs:
           then
             psql -h 127.0.0.1 -U postgres < test_table_postgresql.sql
           fi
+
       - name: Run tests
         run: |
           if [[ $DB == 'mariadb' ]]
@@ -99,3 +104,11 @@ jobs:
             suite="PostgreSQL"
           fi
           vendor/bin/phpunit --testsuite $suite
+
+      - name: Send code coverage
+        if: ${{ !startsWith(matrix.php-version, '7.2') && success() }}
+        continue-on-error: true
+        uses: codacy/codacy-coverage-reporter-action@master
+        with:
+          project-token: ${{ secrets.CODACY_PROJECT_TOKEN }}
+          coverage-reports: build/log/clover.xml

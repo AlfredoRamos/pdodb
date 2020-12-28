@@ -36,7 +36,7 @@
 			<directory suffix=".php">./src/</directory>
 		</include>
 		<report>
-			<clover outputFile="./build/logs/clover.xml"/>
+			<clover outputFile="./build/log/clover.xml"/>
 		</report>
 	</coverage>
 </phpunit>
