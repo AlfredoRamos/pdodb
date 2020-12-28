@@ -106,7 +106,7 @@ jobs:
           vendor/bin/phpunit --testsuite $suite
 
       - name: Send code coverage
-        if: ${{ success() }}
+        if: ${{ !startsWith(matrix.php-version, '7.2') && success() }}
         continue-on-error: true
         uses: codacy/codacy-coverage-reporter-action@master
         with:
