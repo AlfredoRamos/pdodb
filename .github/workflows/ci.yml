@@ -17,9 +17,6 @@ jobs:
     services:
       mariadb:
         image: mariadb:${{ matrix.mariadb-version }}
-        credentials:
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
         env:
           MYSQL_ALLOW_EMPTY_PASSWORD: yes
           MYSQL_DATABASE: test_db
@@ -33,9 +30,6 @@ jobs:
 
       postgresql:
         image: postgres:${{ matrix.postgresql-version }}-alpine
-        credentials:
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
         env:
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: postgres
