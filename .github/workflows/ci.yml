@@ -39,7 +39,7 @@ jobs:
           --health-retries=3
     strategy:
       matrix:
-        php-version: ['7.2', '7.3', '7.4', '8.0']
+        php-version: ['7.2', '7.3', '7.4', '8.0', '8.1']
         database-type: [mariadb, postgresql]
         mariadb-version: ['10.5']
         postgresql-version: ['13.1-alpine']
