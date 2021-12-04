@@ -41,7 +41,7 @@ jobs:
       matrix:
         php-version: ['7.2', '7.3', '7.4', '8.0', '8.1']
         database-type: [mariadb, postgresql]
-        mariadb-version: ['10.5']
+        mariadb-version: ['10.6']
         postgresql-version: ['14-alpine']
     env:
       DB: ${{ matrix.database-type }}
