@@ -22,7 +22,7 @@
 		</testsuite>
 	</testsuites>
 	<php>
-		<var name="DB_HOST" value="127.0.0.1"/>
+		<var name="DB_HOST" value="localhost"/>
 		<var name="DB_NAME" value="test_db"/>
 		<var name="DB_TABLE" value="users"/>
 		<var name="DB_TPREFIX" value="t_"/>
