@@ -2,10 +2,10 @@
 
 A simple PDO wrapper
 
-[![Build Status](https://img.shields.io/github/workflow/status/AlfredoRamos/pdodb/GitHub%20Actions%20CI?style=flat-square)](https://github.com/AlfredoRamos/pdodb/actions)
-[![Latest Stable Version](https://img.shields.io/github/tag/AlfredoRamos/pdodb.svg?style=flat-square&label=stable)](https://github.com/AlfredoRamos/pdodb/releases)
-[![Code Quality](https://img.shields.io/codacy/grade/587b5f5a3b534cb8aec7c3a7cffe6707.svg?style=flat-square)](https://app.codacy.com/manual/AlfredoRamos/pdodb/dashboard)
-[![License](https://img.shields.io/github/license/AlfredoRamos/pdodb.svg?style=flat-square)](https://raw.githubusercontent.com/AlfredoRamos/pdodb/master/LICENSE)
+[![Build Status](https://img.shields.io/github/workflow/status/AlfredoRamos/pdodb/CI?style=flat-square)](https://github.com/AlfredoRamos/pdodb/actions)
+[![Latest Stable Version](https://img.shields.io/github/tag/AlfredoRamos/pdodb?style=flat-square&label=stable)](https://github.com/AlfredoRamos/pdodb/releases)
+[![Code Quality](https://img.shields.io/codacy/grade/587b5f5a3b534cb8aec7c3a7cffe6707?style=flat-square)](https://app.codacy.com/manual/AlfredoRamos/pdodb/dashboard)
+[![License](https://img.shields.io/github/license/AlfredoRamos/pdodb?style=flat-square)](https://raw.githubusercontent.com/AlfredoRamos/pdodb/master/LICENSE)
 
 ### PDO Drivers
 
