@@ -1,14 +1,9 @@
-name: GitHub Actions CI
+name: CI
 
 on:
   push:
-    branches:
-      - master
+    branches: [master]
   pull_request:
-    types:
-      - opened
-      - synchronize
-      - reopened
 
 jobs:
   test:
@@ -29,7 +24,7 @@ jobs:
           --health-retries=3
 
       postgresql:
-        image: postgres:${{ matrix.postgresql-version }}-alpine
+        image: postgres:${{ matrix.postgresql-version }}
         env:
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: postgres
@@ -47,12 +42,12 @@ jobs:
         php-version: ['7.2', '7.3', '7.4', '8.0']
         database-type: [mariadb, postgresql]
         mariadb-version: ['10.5']
-        postgresql-version: ['13.1']
+        postgresql-version: ['13.1-alpine']
     env:
       DB: ${{ matrix.database-type }}
     steps:
       - name: Checkout sources
-        uses: actions/checkout@master
+        uses: actions/checkout@v2
 
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
