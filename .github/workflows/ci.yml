@@ -1,18 +1,14 @@
-name: GitHub Actions CI
+name: CI
 
 on:
   push:
-    branches:
-      - master
+    branches: [master]
   pull_request:
-    types:
-      - opened
-      - synchronize
-      - reopened
 
 jobs:
   test:
-    name: PHP ${{ matrix.php-version }}, ${{ matrix.database-type }}
+    if: ${{ !contains(github.event.head_commit.message, '[skip ci]') }}
+    name: PHP ${{ matrix.php-version }}, ${{ matrix.database-type }} ${{ (matrix.database-type == 'mariadb') && matrix.mariadb-version || matrix.postgresql-version }}
     runs-on: ubuntu-latest
     services:
       mariadb:
@@ -23,13 +19,14 @@ jobs:
         ports:
           - 3306:3306
         options: >-
+          -v /var/run/mysqld:/var/run/mysqld
           --health-cmd="mysqladmin ping"
           --health-interval=10s
           --health-timeout=5s
           --health-retries=3
 
       postgresql:
-        image: postgres:${{ matrix.postgresql-version }}-alpine
+        image: postgres:${{ matrix.postgresql-version }}
         env:
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: postgres
@@ -38,27 +35,28 @@ jobs:
         ports:
           - 5432:5432
         options: >-
+          -v /var/run/postgresql:/var/run/postgresql
           --health-cmd="pg_isready"
           --health-interval=10s
           --health-timeout=5s
           --health-retries=3
     strategy:
       matrix:
-        php-version: ['7.2', '7.3', '7.4', '8.0']
+        php-version: ['7.2', '7.3', '7.4', '8.0', '8.1']
         database-type: [mariadb, postgresql]
-        mariadb-version: ['10.5']
-        postgresql-version: ['13.1']
+        mariadb-version: ['10.6']
+        postgresql-version: ['14-alpine']
     env:
       DB: ${{ matrix.database-type }}
     steps:
       - name: Checkout sources
-        uses: actions/checkout@master
+        uses: actions/checkout@v2
 
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php-version }}
-          extensions: sodium, pdo, pdo_mysql
+          extensions: sodium, pdo_mysql, pdo_pgsql
           tools: composer:v2
           coverage: pcov
 
@@ -82,10 +80,10 @@ jobs:
         run: |
           if [[ $DB == 'mariadb' ]]
           then
-            mysql -h 127.0.0.1 -u root < test_table_mysql.sql
+            mysql -u root < test_table_mysql.sql
           elif [[ $DB == 'postgresql' ]]
           then
-            psql -h 127.0.0.1 -U postgres < test_table_postgresql.sql
+            psql -U postgres < test_table_postgresql.sql
           fi
 
       - name: Run tests
