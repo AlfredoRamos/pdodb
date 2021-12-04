@@ -7,7 +7,7 @@ on:
 
 jobs:
   test:
-    name: PHP ${{ matrix.php-version }}, ${{ matrix.database-type }}
+    name: PHP ${{ matrix.php-version }}, ${{ matrix.database-type }} ${{ (matrix.database-type == 'mariadb') && matrix.mariadb-version || matrix.postgresql-version }}
     runs-on: ubuntu-latest
     services:
       mariadb:
